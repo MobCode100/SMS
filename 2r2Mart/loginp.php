@@ -17,6 +17,6 @@ if (isset($_POST['login'])) {
   } else {
     echo "<script Language = 'javascript'>
           alert ('Invalid username/password!' ) ;
-           window.location='login.php';</script>";;
+           window.location='index.php';</script>";;
   }
 }
