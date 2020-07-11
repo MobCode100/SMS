@@ -1,5 +1,5 @@
 <?php
-require 'functions.php'; // Satu file yang simpan macam2 functions kita
+require 'functions.php'; // Satu file yang simpan macam2 functions kita :)
 session_start();
 /* 
   Function preload ni akan restrict user daripada access page
