@@ -1,2 +1,2 @@
 # SMS
- A simple project for ICT502 subject....
+ A simple project for ICT502 subject
