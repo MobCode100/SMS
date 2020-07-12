@@ -45,38 +45,49 @@ preload('all');
         <div class="span12">
 
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-              <h5>Cureent Employee</h5>
-            </div>
-            <div class="widget-content nopadding">
-              <table class="table table-bordered data-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Phone No</th>
-                    <th>Hire Date</th>
-                    <th>Salary (RM)</th>
-                    <th>Pay Type</th>
-                    <th>Daily Work Hour</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="gradeX">
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+            <h5>All Product</h5>
           </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="gradeX">
+                  <td> </td>
+                  <td> </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+            <h5>Low Stock Product</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="gradeX">
+                  <td> </td>
+                  <td> </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+          
         </div>
       </div>
     </div>
