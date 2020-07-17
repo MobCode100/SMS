@@ -2,8 +2,8 @@
 function preload($job_id)
 {
     if (isset($_SESSION['JOB_ID'])) {
-        if ($job_id != 'all') {
-            if ($_SESSION['JOB_ID'] != $job_id) {
+        if ($job_id !== 'all') {
+            if ($_SESSION['JOB_ID'] !== $job_id) {
                 header("Location: dashboard.php");
             }
         }
@@ -14,8 +14,8 @@ function preload($job_id)
 
 function hidebar($job_id)
 {
-    if ($job_id != 'all') {
-        if ($_SESSION['JOB_ID'] != $job_id) {
+    if ($job_id !== 'all') {
+        if ($_SESSION['JOB_ID'] !== $job_id) {
             echo 'style="display: none"';
         }
     }
