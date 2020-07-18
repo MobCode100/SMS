@@ -1,7 +1,7 @@
 <?php
 require 'functions.php'; // Satu file yang simpan macam2 functions kita
 session_start();
-/* 
+/*
   Function preload ni akan restrict user daripada access page
   Since kita ada 2 jenis user sahaja, values accepted:
   'all' maksudnya semua users/jobs boleh access page ni
@@ -37,15 +37,25 @@ preload('all');
   <div id="content">
     <div id="content-header">
       <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Dashboard</a> </div>
-      <h1>Dashboard</h1>
     </div>
     <div class="container-fluid">
-      <hr>
       <div class="row-fluid">
         <div class="span12">
-
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-shopping-cart"></i></span>
+          <table align="center" border=0>
+            <tr>
+            <th>
+            <img alt="welcome.png" src="img/welcome.png">
+            </th>
+          </tr>
+          <tr>
+          <th>
+          <marquee> THIS WEBSITE IS MADE TO EASE THE PROCESS OF PRODUCTS' STOCK IN BY 2R2 MART </marquee>
+          </th>
+          </tr>
+          </table>
+          <div class="widget-box">
+            <div class="widget-title"> <span class="icon"><button type="submit" class="btn-primary"><i class="icon-shopping-cart"></i></button></span>
               <h5>All Product</h5>
             </div>
             <div class="widget-content nopadding">
@@ -83,9 +93,9 @@ preload('all');
               </table>
             </div>
           </div>
-
+          <hr>
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-warning-sign"></i></span>
+            <div class="widget-title"> <span class="icon"><button type="submit" class="btn-danger"><i class="icon-warning-sign"></i></button></span>
               <h5>Low Stock Product</h5>
             </div>
             <div class="widget-content nopadding">
@@ -121,7 +131,7 @@ preload('all');
               </table>
             </div>
           </div>
-
+</div>
         </div>
       </div>
     </div>
