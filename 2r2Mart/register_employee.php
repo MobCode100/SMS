@@ -8,6 +8,9 @@ session_start();
   1 maksudnya job_id = 1 = MANAGER sahaja yang boleh access
 */
 preload(1);
+require("Connection.php");
+$con = new Connection();
+$job_title = $con->query("SELECT * from JOB", []);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,39 +30,6 @@ preload(1);
   <link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-  <script type="text/javascript">
-    $(function() {
-      $("#jobPosition").change(function() {
-        if ($(this).val() == "employee" || $(this).val() == "supervisor") {
-          $("#employeeType").show();
-        } else {
-          $("#employeeType").hide();
-        }
-      });
-    });
-
-    $(function() {
-      $("#timeType").change(function() {
-        if ($(this).val() == "fullTime") {
-          $("#Allowance").show();
-        } else {
-          $("#Allowance").hide();
-        }
-      });
-    });
-
-    $(function() {
-      $("#timeType").change(function() {
-        if ($(this).val() == "partTime") {
-          $("#hourlySalary").show();
-        } else {
-          $("#hourlySalary").hide();
-        }
-      });
-    });
-  </script>
 </head>
 
 <body>
@@ -90,59 +60,63 @@ preload(1);
                 <div class="control-group">
                   <label class="control-label">Name :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="empname" required/>
+                    <input type="text" class="span11" name="empname" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Email :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="email"required/>
+                    <input type="text" class="span11" name="email" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Address :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="address"required/>
+                    <input type="text" class="span11" name="address" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Phone Number :</label>
                   <div class="controls ">
-                    <input type="text" class="span5" name="phoneNO"required/>
+                    <input type="text" class="span5" name="phoneNO" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Password :</label>
                   <div class="controls ">
-                    <input type="password" class="span5" name="password"required/>
+                    <input type="password" class="span5" name="password" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Salary :</label>
                   <div class="controls ">
-                    <input type="text" class="span5" name="salary"required/>
+                    <input type="text" class="span5" name="salary" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Hire Date :</label>
                   <div class="controls">
-                    <input type="date" class="" name="hiredate"required/>
+                    <input type="date" class="" name="hiredate" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Job Position</label>
                   <div class="controls">
-                    <select id="jobPosition" class="span5 " name="jobPosition" onchange='CheckPosition(this.value);'>
-                      <option value=" ">Choose job position</option>
-                      <option value="manager">Manager</option>
-                      <option value="employee">Employee</option>
+                    <select id="jobPosition" class="span5 " name="jobPosition">
+                      <option value='[null,""]'>Choose job position</option>
+                      <?php if ($job_title != null) {
+                        for ($i = 0; $i < count($job_title); $i++) {
+                      ?>
+                          <option value='<?php echo "[$i,\"".$job_title[$i]['JOB_TITLE']."\"]" ?>'><?php echo ucfirst(strtolower($job_title[$i]['JOB_TITLE'])) ?></option>
+                      <?php }
+                      } ?>
                     </select>
                   </div>
                 </div>
@@ -160,14 +134,14 @@ preload(1);
                 <div class="control-group" id="Allowance" style="display: none">
                   <label class="control-label">Allowance :</label>
                   <div class="controls">
-                    <input type="text" name="allowance" class="span5" placeholder="Allowance"/>
+                    <input type="text" name="allowance" class="span5" placeholder="Allowance" />
                   </div>
                 </div>
 
                 <div class="control-group" id="hourlySalary" style="display: none">
                   <label class="control-label">Hourly Rate :</label>
                   <div class="controls">
-                    <input type="text" name="hourlyrate" class="span5" placeholder="Hourly Rate"/>
+                    <input type="text" name="hourlyrate" class="span5" placeholder="Hourly Rate" />
                   </div>
                 </div>
 
@@ -198,15 +172,47 @@ preload(1);
   <script src="js/bootstrap-wysihtml5.js"></script>
   <script>
     function validateEmail(email) {
-        var re = /^(([^\s"().,:;<>@\[\\\]])+(\.[^\s"().,:;<>@\[\\\]]+)*|(".+"))@(\[(([0-9]{1,2}|(25[0-5]|[0-2][0-4][0-9]))\.){3}([0-9]{1,2}|(25[0-4]|[0-2][0-4][0-9]))\]|([a-zA-Z\-0-9]+\.)+([a-zA-Z]{2,}))$/;
-        if (re.test(email) == false)
-        {
-          alert("Please insert correct Email");
-        }
+      var re = /^(([^\s"().,:;<>@\[\\\]])+(\.[^\s"().,:;<>@\[\\\]]+)*|(".+"))@(\[(([0-9]{1,2}|(25[0-5]|[0-2][0-4][0-9]))\.){3}([0-9]{1,2}|(25[0-4]|[0-2][0-4][0-9]))\]|([a-zA-Z\-0-9]+\.)+([a-zA-Z]{2,}))$/;
+      if (re.test(email) == false) {
+        alert("Please insert correct Email");
+      }
 
-        return re.test(email);
+      return re.test(email);
 
     }
   </script>
+  <script type="text/javascript">
+    $(function() {
+      $("#jobPosition").change(function() {
+        var array = JSON.parse($(this).val());
+        if (array[1].toLowerCase() == "staff") {
+          $("#employeeType").show();
+        } else {
+          $("#employeeType").hide();
+        }
+      });
+    });
+
+    $(function() {
+      $("#timeType").change(function() {
+        if ($(this).val() == "fullTime") {
+          $("#Allowance").show();
+        } else {
+          $("#Allowance").hide();
+        }
+      });
+    });
+
+    $(function() {
+      $("#timeType").change(function() {
+        if ($(this).val() == "partTime") {
+          $("#hourlySalary").show();
+        } else {
+          $("#hourlySalary").hide();
+        }
+      });
+    });
+  </script>
 </body>
+
 </html>
