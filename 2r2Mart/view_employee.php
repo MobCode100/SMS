@@ -1,7 +1,7 @@
 <?php
 require 'functions.php'; // Satu file yang simpan macam2 functions kita
 session_start();
-/* 
+/*
   Function preload ni akan restrict user daripada access page
   Since kita ada 2 jenis user sahaja, values accepted:
   'all' maksudnya semua users/jobs boleh access page ni
@@ -35,10 +35,10 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
 
 <body>
   <!--top-Header-menu-->
-  <?php include("topheadermenu.php"); ?>
+  <?php include 'topheadermenu.php'; ?>
   <!--sidebar-menu-->
 
-  <?php include("sidebar.php"); ?>
+  <?php include 'sidebar.php'; ?>
 
   <div id="content">
     <div id="content-header">
@@ -72,7 +72,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                   </thead>
                   <tbody>
                     <?php
-                    require("Connection.php");
+                    require 'Connection.php';
                     $con = new Connection();
                     $emp = $con->query("
                     Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_title,
@@ -83,35 +83,37 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     FROM employee e join full_time f on e.emp_id = f.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
                     order by e.emp_id asc", [$manager]);
                     if ($emp != null) {
-                      for ($i = 0; $i < count($emp); $i++) {
-                        $hiddenid = $i + 1; // for security purposes
-                    ?>
+                        for ($i = 0; $i < count($emp); ++$i) {
+                            $hiddenid = $i + 1; // for security purposes ?>
                         <tr class="gradeX">
-                          <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME'] ?></td>
-                          <td><?php echo $emp[$i]['EMAIL'] ?></td>
-                          <td><?php echo $emp[$i]['PHONENO'] ?></td>
-                          <td><?php echo $emp[$i]['SUPERVISOR'] ?></td>
-                          <?php if ($manager) { ?>
-                            <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS'] ?></td>
-                            <td><?php echo $emp[$i]['SALARY'] ?></td>
-                            <td><?php echo $emp[$i]['HIRE_DATE'] ?></td>
-                            <td><?php echo $emp[$i]['JOB_TITLE'] ?></td>
+                          <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME']; ?></td>
+                          <td><?php echo $emp[$i]['EMAIL']; ?></td>
+                          <td><?php echo $emp[$i]['PHONENO']; ?></td>
+                          <td><?php echo $emp[$i]['SUPERVISOR']; ?></td>
+                          <?php if ($manager) {
+                                ?>
+                            <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS']; ?></td>
+                            <td><?php echo $emp[$i]['SALARY']; ?></td>
+                            <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
+                            <td><?php echo $emp[$i]['JOB_TITLE']; ?></td>
                             <td>
                               <p>
                                 <center>
                                   <form class="tableform" action="register_employee.php" method="post">
-                                    <input type="hidden" value="<?php echo $hiddenid ?>" name="row" />
+                                    <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
                                     <button class="btn btn-warning" name="fulltime">Edit</button>
                                   </form>
-                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME'] ?>')">
-                                    <input type="hidden" value="<?php echo $hiddenid ?>" name="row" />
+                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME']; ?>')">
+                                    <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
                                     <button class="btn btn-danger" name="fulltime">Delete</button>
                                   </form>
                               </p>
                             </td>
-                          <?php } ?>
+                          <?php
+                            } ?>
                         </tr>
-                    <?php }
+                    <?php
+                        }
                     } ?>
                   </tbody>
                 </table>
@@ -157,35 +159,37 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     FROM employee e join part_time p on e.emp_id = p.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
                     order by e.emp_id asc", [$manager]);
                     if ($emp != null) {
-                      for ($i = 0; $i < count($emp); $i++) {
-                        $hiddenid = $i + 1; // for security purposes
-                    ?>
+                        for ($i = 0; $i < count($emp); ++$i) {
+                            $hiddenid = $i + 1; // for security purposes ?>
                         <tr class="gradeX">
-                          <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME'] ?></td>
-                          <td><?php echo $emp[$i]['EMAIL'] ?></td>
-                          <td><?php echo $emp[$i]['PHONENO'] ?></td>
-                          <td><?php echo $emp[$i]['SUPERVISOR'] ?></td>
-                          <?php if ($manager) { ?>
-                            <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS'] ?></td>
-                            <td><?php echo $emp[$i]['SALARY'] ?></td>
-                            <td><?php echo $emp[$i]['HIRE_DATE'] ?></td>
-                            <td><?php echo $emp[$i]['JOB_TITLE'] ?></td>
+                          <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME']; ?></td>
+                          <td><?php echo $emp[$i]['EMAIL']; ?></td>
+                          <td><?php echo $emp[$i]['PHONENO']; ?></td>
+                          <td><?php echo $emp[$i]['SUPERVISOR']; ?></td>
+                          <?php if ($manager) {
+                                ?>
+                            <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS']; ?></td>
+                            <td><?php echo $emp[$i]['SALARY']; ?></td>
+                            <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
+                            <td><?php echo $emp[$i]['JOB_TITLE']; ?></td>
                             <td>
                               <p>
                                 <center>
                                   <form class="tableform" action="register_employee.php" method="post">
-                                    <input type="hidden" value="<?php echo $hiddenid ?>" name="row" />
+                                    <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
                                     <button class="btn btn-warning" name="parttime">Edit</button>
                                   </form>
-                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME'] ?>')">
-                                    <input type="hidden" value="<?php echo $hiddenid ?>" name="row" />
+                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME']; ?>')">
+                                    <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
                                     <button class="btn btn-danger" name="parttime">Delete</button>
                                   </form>
                               </p>
                             </td>
-                          <?php } ?>
+                          <?php
+                            } ?>
                         </tr>
-                    <?php }
+                    <?php
+                        }
                     } ?>
                   </tbody>
                 </table>
