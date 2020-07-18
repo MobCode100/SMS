@@ -1,7 +1,7 @@
 <?php
 require 'functions.php'; // Satu file yang simpan macam2 functions kita
 session_start();
-/* 
+/*
   Function preload ni akan restrict user daripada access page
   Since kita ada 2 jenis user sahaja, values accepted:
   'all' maksudnya semua users/jobs boleh access page ni
@@ -40,7 +40,6 @@ preload(1);
       });
     });
 
-
     $(function() {
       $("#timeType").change(function() {
         if ($(this).val() == "fullTime") {
@@ -65,11 +64,11 @@ preload(1);
 
 <body>
   <!--top-Header-menu-->
-  <?php include("topheadermenu.php"); ?>
+  <?php include 'topheadermenu.php'; ?>
 
 
   <!--sidebar-menu-->
-  <?php include("sidebar.php"); ?>
+  <?php include 'sidebar.php'; ?>
   <!--close-left-menu-stats-sidebar-->
 
   <div id="content">
@@ -86,54 +85,54 @@ preload(1);
               <h5>Employee Info</h5>
             </div>
             <div class="widget-content nopadding">
-              <form action="#" method="get" class="form-horizontal">
+              <form name="form1" action="registerprocess.php" method="POST" class="form-horizontal" onsubmit="return validateEmail(document.form1.email.value)" <?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>>
 
                 <div class="control-group">
                   <label class="control-label">Name :</label>
                   <div class="controls">
-                    <input type="text" class="span11" />
+                    <input type="text" class="span11" name="empname" required/>
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Email :</label>
                   <div class="controls">
-                    <input type="text" class="span11" />
+                    <input type="text" class="span11" name="email"required/>
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Address :</label>
                   <div class="controls">
-                    <input type="text" class="span11" />
+                    <input type="text" class="span11" name="address"required/>
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Phone Number :</label>
                   <div class="controls ">
-                    <input type="text" class="span5 " />
+                    <input type="text" class="span5" name="phoneNO"required/>
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Password :</label>
                   <div class="controls ">
-                    <input type="text" class="span5 " />
+                    <input type="password" class="span5" name="password"required/>
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Salary :</label>
                   <div class="controls ">
-                    <input type="text" class="span5 " />
+                    <input type="text" class="span5" name="salary"required/>
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Hire Date :</label>
                   <div class="controls">
-                    <input type="text" data-date="" data-date-format="dd-mm-yyyy" value=" " class="datepicker span5" />
+                    <input type="date" class="" name="hiredate"required/>
                   </div>
                 </div>
 
@@ -147,13 +146,10 @@ preload(1);
                     </select>
                   </div>
                 </div>
-
-
-
                 <div class="control-group" id="employeeType" style="display: none">
                   <label class="control-label">Employee Type</label>
                   <div class="controls">
-                    <select id="timeType" class="span5 " name="employeeType">
+                    <select id="timeType" class="span5 " name="employeeType" required>
                       <option value=" ">Choose employee type</option>
                       <option value="fullTime">Full Time</option>
                       <option value="partTime">Part Time</option>
@@ -164,19 +160,19 @@ preload(1);
                 <div class="control-group" id="Allowance" style="display: none">
                   <label class="control-label">Allowance :</label>
                   <div class="controls">
-                    <input type="text" class="span5" placeholder="Allowance" />
+                    <input type="text" name="allowance" class="span5" placeholder="Allowance"/>
                   </div>
                 </div>
 
                 <div class="control-group" id="hourlySalary" style="display: none">
                   <label class="control-label">Hourly Rate :</label>
                   <div class="controls">
-                    <input type="text" class="span5" placeholder="Hourly Rate" />
+                    <input type="text" name="hourlyrate" class="span5" placeholder="Hourly Rate"/>
                   </div>
                 </div>
 
                 <div align="right" class="form-actions">
-                  <button type="submit" class="btn btn-success">Save</button>
+                  <button type="submit" name="submit" class="btn btn-success">Save</button>
                 </div>
               </form>
             </div>
@@ -200,6 +196,17 @@ preload(1);
   <script src="js/wysihtml5-0.3.0.js"></script>
   <script src="js/jquery.peity.min.js"></script>
   <script src="js/bootstrap-wysihtml5.js"></script>
-</body>
+  <script>
+    function validateEmail(email) {
+        var re = /^(([^\s"().,:;<>@\[\\\]])+(\.[^\s"().,:;<>@\[\\\]]+)*|(".+"))@(\[(([0-9]{1,2}|(25[0-5]|[0-2][0-4][0-9]))\.){3}([0-9]{1,2}|(25[0-4]|[0-2][0-4][0-9]))\]|([a-zA-Z\-0-9]+\.)+([a-zA-Z]{2,}))$/;
+        if (re.test(email) == false)
+        {
+          alert("Please insert correct Email");
+        }
 
+        return re.test(email);
+
+    }
+  </script>
+</body>
 </html>
