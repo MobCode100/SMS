@@ -1,3 +1,14 @@
+<?php 
+require 'functions.php'; // Satu file yang simpan macam2 functions kita
+session_start();
+/* 
+  Function preload ni akan restrict user daripada access page
+  Since kita ada 2 jenis user sahaja, values accepted:
+  'all' maksudnya semua users/jobs boleh access page ni
+  1 maksudnya job_id = 1 = MANAGER sahaja yang boleh access
+*/
+preload('all');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
