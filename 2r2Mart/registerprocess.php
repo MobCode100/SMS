@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
     $pass = $_POST['password'];
     $salary = $_POST['salary'];
     $hiredate = $_POST['hiredate'];
-    $jobposition = $_POST['jobPosition'];
+    $jobposition = json_decode($_POST['jobPosition']);
     $emptype = $_POST['employeeType'];
     $allowance = $_POST['allowance'];
     $hourlyrate = $_POST['hourlyrate'];
@@ -45,16 +45,21 @@ if (isset($_POST['submit'])) {
         if ($validphoneno != '') {
             if ($validpass == true) {
                 if ($salaryform == true) {
-                    if ($jobposition == 'manager') {
-                        $con->query("INSERT INTO EMPLOYEE
-                         (NAME,EMAIL,ADDRESS,PHONENO,PASSWORD,SALARY,HIRE_DATE,JOB_ID,SUPERVISOR_ID)
-                         VALUES ('$name','$email','$address','$phoneno','$pass','$salary',DATE '$hiredate',1,null)", []);
+                    if ($jobposition[1] == 'MANAGER' || $jobposition[1] == 'SUPERVISOR') {
+                        $con->query(
+                            "INSERT INTO EMPLOYEE
+                         (NAME,EMAIL,ADDRESS,PHONENO,PASSWORD,SALARY,HIRE_DATE,JOB_ID,SUPERVISOR_ID) VALUES (?,?,?,?,?,?,DATE ?,?,null)",
+                         [$name, $email, $address, $phoneno, $pass, $salary, $hiredate, $jobposition[0]]
+                        );
+                        $last_id = $con->query('SELECT EMP_AUTOINC.currval from dual', [])[0][0];
+
+                        $con->query("INSERT INTO FULL_TIME(EMP_ID,ALLOWANCE) VALUES (?,0)", [$last_id]);
                         echo "<script language='javascript'>window.location='register_employee.php';alert('Successfully Register');</script>";
                     } else {
                         if ($emptype == 'fullTime' && $allowanceform == true) {
                             $con->query("INSERT INTO EMPLOYEE
                              (NAME,EMAIL,ADDRESS,PHONENO,PASSWORD,SALARY,HIRE_DATE,JOB_ID,SUPERVISOR_ID)
-                             VALUES ('$name','$email','$address','$phoneno','$pass','$salary',DATE '$hiredate',2,null)", []);
+                             VALUES ('$name','$email','$address','$phoneno','$pass','$salary',DATE '$hiredate',".$jobposition[0].",null)", []);
                             $last_id = $con->query('SELECT EMP_AUTOINC.currval from dual', []);
                             $last_id2 = $last_id[0][0];
                             $con->query("INSERT INTO FULL_TIME
@@ -69,7 +74,7 @@ if (isset($_POST['submit'])) {
                         if ($emptype == 'partTime' && $hourlyform == true) {
                             $con->query("INSERT INTO EMPLOYEE
                              (NAME,EMAIL,ADDRESS,PHONENO,PASSWORD,SALARY,HIRE_DATE,JOB_ID,SUPERVISOR_ID)
-                             VALUES ('$name','$email','$address','$phoneno','$pass','$salary',DATE '$hiredate',2,null)", []);
+                             VALUES ('$name','$email','$address','$phoneno','$pass','$salary',DATE '$hiredate',".$jobposition[0].",null)", []);
                             $last_id = $con->query('SELECT EMP_AUTOINC.currval from dual', []);
                             $last_id2 = $last_id[0][0];
                             $con->query("INSERT INTO PART_TIME
