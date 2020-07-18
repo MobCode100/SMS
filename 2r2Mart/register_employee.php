@@ -8,9 +8,9 @@ session_start();
   1 maksudnya job_id = 1 = MANAGER sahaja yang boleh access
 */
 preload(1);
-require("Connection.php");
+require 'Connection.php';
 $con = new Connection();
-$job_title = $con->query("SELECT * from JOB", []);
+$job_title = $con->query('SELECT * from JOB', []);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,11 +112,12 @@ $job_title = $con->query("SELECT * from JOB", []);
                     <select id="jobPosition" class="span5 " name="jobPosition">
                       <option value='[null,""]'>Choose job position</option>
                       <?php if ($job_title != null) {
-                        for ($i = 0; $i < count($job_title); $i++) {
-                      ?>
-                          <option value='<?php echo "[$i,\"".$job_title[$i]['JOB_TITLE']."\"]" ?>'><?php echo ucfirst(strtolower($job_title[$i]['JOB_TITLE'])) ?></option>
-                      <?php }
-                      } ?>
+    for ($i = 0; $i < count($job_title); ++$i) {
+        ?>
+                          <option value='<?php echo "[$i,\"".$job_title[$i]['JOB_TITLE'].'"]'; ?>'><?php echo ucfirst(strtolower($job_title[$i]['JOB_TITLE'])); ?></option>
+                      <?php
+    }
+} ?>
                     </select>
                   </div>
                 </div>
