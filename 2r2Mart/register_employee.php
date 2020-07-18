@@ -10,7 +10,68 @@ session_start();
 preload(1);
 require("Connection.php");
 $con = new Connection();
-$job_title = $con->query("SELECT * from JOB", []);
+$job_title = $con->query("SELECT * from JOB order by job_id asc", []);
+$howmanyjob = count($job_title);
+$logged_in = $_SESSION['EMP_ID']; // employee id yang login
+$name = "";
+$email = "";
+$phoneno = "";
+$address = "";
+$salary = "";
+$hire_date = "";
+$allowance = "";
+$hourly_rate = "";
+$job = '[null,""]';
+$edit = false;
+if (isset($_POST['fulltime'])) {
+  $edit = true;
+  $emp_list = $con->query(
+    "Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,f.allowance
+    FROM employee e join full_time f on e.emp_id = f.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
+    order by e.emp_id asc",
+    [$logged_in]
+  );
+
+  if ($emp_list != null) {
+    $index =  $_POST['row'] - 1;
+    $name = $emp_list[$index]['NAME'];
+    $email = $emp_list[$index]['EMAIL'];
+    $phoneno = $emp_list[$index]['PHONENO'];
+    $address = $emp_list[$index]['ADDRESS'];
+    $salary = $emp_list[$index]['SALARY'];
+    $hire_date = $emp_list[$index]['HIRE_DATE'];
+    $allowance = $emp_list[$index]['ALLOWANCE'];
+    $job = $emp_list[$index]['JOB_ID'];
+  }
+} else if (isset($_POST['parttime'])) {
+  $edit = true;
+  $emp_list = $con->query(
+    "Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,p.hourly_rate
+    FROM employee e join part_time p on e.emp_id = p.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
+    order by e.emp_id asc",
+    [$logged_in]
+  );
+
+  if ($emp_list != null) {
+    $index =  $_POST['row'] - 1;
+    $name = $emp_list[$index]['NAME'];
+    $email = $emp_list[$index]['EMAIL'];
+    $phoneno = $emp_list[$index]['PHONENO'];
+    $address = $emp_list[$index]['ADDRESS'];
+    $salary = $emp_list[$index]['SALARY'];
+    $hire_date = $emp_list[$index]['HIRE_DATE'];
+    $hourly_rate = $emp_list[$index]['HOURLY_RATE'];
+    $job = $emp_list[$index]['JOB_ID'];
+  }
+}
+
+if ($job !== '[null,""]') {
+  for ($i = 0; $i < $howmanyjob; $i++) {
+    if ($job == $job_title[$i]['JOB_ID']) {
+      $job = "[$i,\"" . $job_title[$i]['JOB_TITLE'] . "\"]";
+    }
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,33 +116,39 @@ $job_title = $con->query("SELECT * from JOB", []);
               <h5>Employee Info</h5>
             </div>
             <div class="widget-content nopadding">
-              <form name="form1" action="registerprocess.php" method="POST" class="form-horizontal" onsubmit="return validateEmail(document.form1.email.value)" <?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>>
+              <form name="form1" action="
+                                          <?php if ($edit) {
+                                            echo 'edit_employee.php';
+                                          } else {
+                                            echo 'registerprocess.php';
+                                          } ?>
+                                        " method="POST" class="form-horizontal" onsubmit="return validateEmail(document.form1.email.value)" <?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>>
 
                 <div class="control-group">
                   <label class="control-label">Name :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="empname" required />
+                    <input type="text" class="span11" name="empname" value="<?php echo $name ?>" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Email :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="email" required />
+                    <input type="text" class="span11" name="email" value="<?php echo $email ?>" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Address :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="address" required />
+                    <input type="text" class="span11" name="address" value="<?php echo $address ?>" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Phone Number :</label>
                   <div class="controls ">
-                    <input type="text" class="span5" name="phoneNO" required />
+                    <input type="text" class="span5" name="phoneNO" value="<?php echo $phoneno ?>" required />
                   </div>
                 </div>
 
@@ -95,26 +162,26 @@ $job_title = $con->query("SELECT * from JOB", []);
                 <div class="control-group">
                   <label class="control-label">Salary :</label>
                   <div class="controls ">
-                    <input type="text" class="span5" name="salary" required />
+                    <input type="text" class="span5" name="salary" value="<?php echo $salary ?>" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Hire Date :</label>
                   <div class="controls">
-                    <input type="date" class="" name="hiredate" required />
+                    <input type="date" class="" name="hiredate" value="<?php echo date_format(date_create($hire_date), "Y-m-d"); ?>" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Job Position</label>
                   <div class="controls">
-                    <select id="jobPosition" class="span5 " name="jobPosition">
+                    <select id="jobPosition" class="span5 " name="jobPosition" required>
                       <option value='[null,""]'>Choose job position</option>
                       <?php if ($job_title != null) {
-                        for ($i = 0; $i < count($job_title); $i++) {
+                        for ($i = 0; $i < $howmanyjob; $i++) {
                       ?>
-                          <option value='<?php echo "[$i,\"".$job_title[$i]['JOB_TITLE']."\"]" ?>'><?php echo ucfirst(strtolower($job_title[$i]['JOB_TITLE'])) ?></option>
+                          <option value='<?php echo "[$i,\"" . $job_title[$i]['JOB_TITLE'] . "\"]" ?>'><?php echo ucfirst(strtolower($job_title[$i]['JOB_TITLE'])) ?></option>
                       <?php }
                       } ?>
                     </select>
@@ -125,8 +192,12 @@ $job_title = $con->query("SELECT * from JOB", []);
                   <div class="controls">
                     <select id="timeType" class="span5 " name="employeeType" required>
                       <option value=" ">Choose employee type</option>
-                      <option value="fullTime">Full Time</option>
-                      <option value="partTime">Part Time</option>
+                      <option value="fullTime" <?php if (isset($_POST['fulltime'])) {
+                                                  echo "selected";
+                                                } ?>>Full Time</option>
+                      <option value="partTime" <?php if (isset($_POST['parttime'])) {
+                                                  echo "selected";
+                                                } ?>>Part Time</option>
                     </select>
                   </div>
                 </div>
@@ -134,14 +205,14 @@ $job_title = $con->query("SELECT * from JOB", []);
                 <div class="control-group" id="Allowance" style="display: none">
                   <label class="control-label">Allowance :</label>
                   <div class="controls">
-                    <input type="text" name="allowance" class="span5" placeholder="Allowance" />
+                    <input type="text" name="allowance" value="<?php echo $allowance ?>" class="span5" placeholder="Allowance" />
                   </div>
                 </div>
 
                 <div class="control-group" id="hourlySalary" style="display: none">
                   <label class="control-label">Hourly Rate :</label>
                   <div class="controls">
-                    <input type="text" name="hourlyrate" class="span5" placeholder="Hourly Rate" />
+                    <input type="text" name="hourlyrate" class="span5" value="<?php echo $hourly_rate ?>" placeholder="Hourly Rate" />
                   </div>
                 </div>
 
@@ -187,8 +258,16 @@ $job_title = $con->query("SELECT * from JOB", []);
         var array = JSON.parse($(this).val());
         if (array[1].toLowerCase() == "staff") {
           $("#employeeType").show();
+          $("#Allowance").hide();
+          $('#timeType').trigger("change");
         } else {
           $("#employeeType").hide();
+          $("#hourlySalary").hide();
+          if (array[1].toLowerCase() != "") {
+            $("#Allowance").show();
+          } else {
+            $("#Allowance").hide();
+          }
         }
       });
     });
@@ -196,21 +275,20 @@ $job_title = $con->query("SELECT * from JOB", []);
     $(function() {
       $("#timeType").change(function() {
         if ($(this).val() == "fullTime") {
+          $("#hourlySalary").hide();
           $("#Allowance").show();
-        } else {
+        } else if ($(this).val() == "partTime") {
           $("#Allowance").hide();
-        }
-      });
-    });
-
-    $(function() {
-      $("#timeType").change(function() {
-        if ($(this).val() == "partTime") {
           $("#hourlySalary").show();
         } else {
+          $("#Allowance").hide();
           $("#hourlySalary").hide();
         }
       });
+    });
+    $(document).ready(function() {
+      $("#jobPosition").val('<?php echo $job ?>');
+      $("#jobPosition").trigger("change");
     });
   </script>
 </body>

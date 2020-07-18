@@ -177,7 +177,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                                     <input type="hidden" value="<?php echo $hiddenid ?>" name="row" />
                                     <button class="btn btn-warning" name="parttime">Edit</button>
                                   </form>
-                                  <form class="tableform" action="delete_employee.php" method="post">
+                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME'] ?>')">
                                     <input type="hidden" value="<?php echo $hiddenid ?>" name="row" />
                                     <button class="btn btn-danger" name="parttime">Delete</button>
                                   </form>
