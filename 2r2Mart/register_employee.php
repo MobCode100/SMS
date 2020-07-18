@@ -26,7 +26,7 @@ $edit = false;
 if (isset($_POST['fulltime'])) {
   $edit = true;
   $emp_list = $con->query(
-    "Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,f.allowance
+    "Select e.emp_id,e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,f.allowance
     FROM employee e join full_time f on e.emp_id = f.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
     order by e.emp_id asc",
     [$logged_in]
@@ -34,6 +34,7 @@ if (isset($_POST['fulltime'])) {
 
   if ($emp_list != null) {
     $index =  $_POST['row'] - 1;
+    $emp_id = $emp_list[$index]['EMP_ID'];
     $name = $emp_list[$index]['NAME'];
     $email = $emp_list[$index]['EMAIL'];
     $phoneno = $emp_list[$index]['PHONENO'];
@@ -46,7 +47,7 @@ if (isset($_POST['fulltime'])) {
 } else if (isset($_POST['parttime'])) {
   $edit = true;
   $emp_list = $con->query(
-    "Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,p.hourly_rate
+    "Select e.emp_id,e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,p.hourly_rate
     FROM employee e join part_time p on e.emp_id = p.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
     order by e.emp_id asc",
     [$logged_in]
@@ -54,6 +55,7 @@ if (isset($_POST['fulltime'])) {
 
   if ($emp_list != null) {
     $index =  $_POST['row'] - 1;
+    $emp_id = $emp_list[$index]['EMP_ID'];
     $name = $emp_list[$index]['NAME'];
     $email = $emp_list[$index]['EMAIL'];
     $phoneno = $emp_list[$index]['PHONENO'];
@@ -104,8 +106,16 @@ if ($job !== '[null,""]') {
 
   <div id="content">
     <div id="content-header">
-      <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Register Employee</a> </div>
-      <h1>Register Employee</h1>
+      <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current"><?php if ($edit) {
+                                                                                                                                                            echo 'Edit Employee';
+                                                                                                                                                          } else {
+                                                                                                                                                            echo 'Register Employee';
+                                                                                                                                                          } ?></a> </div>
+      <h1><?php if ($edit) {
+            echo 'Edit Employee';
+          } else {
+            echo 'Register Employee';
+          } ?></h1>
     </div>
     <div class="container-fluid">
       <hr>
@@ -123,7 +133,6 @@ if ($job !== '[null,""]') {
                                             echo 'registerprocess.php';
                                           } ?>
                                         " method="POST" class="form-horizontal" onsubmit="return validateEmail(document.form1.email.value)" <?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>>
-
                 <div class="control-group">
                   <label class="control-label">Name :</label>
                   <div class="controls">
@@ -165,7 +174,9 @@ if ($job !== '[null,""]') {
                     <input type="text" class="span5" name="salary" value="<?php echo $salary ?>" required />
                   </div>
                 </div>
-
+                <?php if ($edit) { ?>
+                  <input type="hidden" name="empid" value="<?php echo $emp_id;  ?>" />
+                <?php }  ?>
                 <div class="control-group">
                   <label class="control-label">Hire Date :</label>
                   <div class="controls">
