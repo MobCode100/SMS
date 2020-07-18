@@ -32,7 +32,7 @@ preload(1);
   <script type="text/javascript">
     $(function() {
       $("#jobPosition").change(function() {
-        if ($(this).val() == "employee") {
+        if ($(this).val() == "employee" || $(this).val() == "supervisor") {
           $("#employeeType").show();
         } else {
           $("#employeeType").hide();
