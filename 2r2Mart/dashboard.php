@@ -24,6 +24,11 @@ preload('all');
   <link rel="stylesheet" href="css/matrix-media.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <style>
+    .no_click:hover{
+      cursor: default;
+    }
+  </style>
 </head>
 
 <body>
@@ -56,8 +61,8 @@ preload('all');
           </tr>
           </table>
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><button type="submit" class="btn-primary"><i class="icon-shopping-cart"></i></button></span>
-              <h5>All Product</h5>
+            <div class="widget-title"> <span class="icon"><button type="submit" disabled class="btn-primary no_click"><i class="icon-shopping-cart"></i></button></span>
+              <h5>All Products</h5>
             </div>
             <div class="widget-content nopadding">
               <table class="table table-bordered data-table">
@@ -96,8 +101,8 @@ preload('all');
           </div>
           <hr>
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><button type="submit" class="btn-danger"><i class="icon-warning-sign"></i></button></span>
-              <h5>Low Stock Product</h5>
+            <div class="widget-title"> <span class="icon"><button type="submit" disabled class="btn-danger no_click"><i class="icon-warning-sign"></i></button></span>
+              <h5>Low Stock Products</h5>
             </div>
             <div class="widget-content nopadding">
               <table class="table table-bordered data-table">
