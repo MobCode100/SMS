@@ -156,8 +156,8 @@ else {
                     <input type="hidden" name="changed_super" value="$emp_id">
                     <div class="row-fluid">
                       <div class="center">
-                      <div class="span3 text-left"><button type="submit" name="Save" class="btn btn-success">Save</button></p></div>
-                      <div class="span9 text-center"><button type="submit" name="Delete" class="btn btn-danger">Delete Current Supervisor</button></p></div>
+                      <button type="submit" name="Save" class="btn btn-success">Save</button>
+                      <button type="submit" name="Delete" class="btn btn-danger">No Supervisor</button></p>
                     </div>
                   </div>
                         </td></form>
