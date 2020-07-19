@@ -1,2 +1,2 @@
 # SMS
- A simple project for ICT502 subject.
+ A trash project used as an experiment to GitHub.
