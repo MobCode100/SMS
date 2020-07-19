@@ -8,71 +8,71 @@ session_start();
   1 maksudnya job_id = 1 = MANAGER sahaja yang boleh access
 */
 preload(1);
-require("Connection.php");
+require 'Connection.php';
 $con = new Connection();
-$job_title = $con->query("SELECT * from JOB order by job_id asc", []);
+$job_title = $con->query('SELECT * from JOB order by job_id asc', []);
 $howmanyjob = count($job_title);
 $logged_in = $_SESSION['EMP_ID']; // employee id yang login
-$name = "";
-$email = "";
-$phoneno = "";
-$address = "";
-$salary = "";
-$hire_date = "";
-$allowance = "";
-$hourly_rate = "";
+$name = '';
+$email = '';
+$phoneno = '';
+$address = '';
+$salary = '';
+$hire_date = '';
+$allowance = '';
+$hourly_rate = '';
 $job = '[null,""]';
 $edit = false;
 if (isset($_POST['fulltime'])) {
-  $edit = true;
-  $emp_list = $con->query(
-    "Select e.emp_id,e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,f.allowance
+    $edit = true;
+    $emp_list = $con->query(
+    'Select e.emp_id,e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,f.allowance
     FROM employee e join full_time f on e.emp_id = f.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
-    order by e.emp_id asc",
+    order by e.emp_id asc',
     [$logged_in]
   );
 
-  if ($emp_list != null) {
-    $index =  $_POST['row'] - 1;
-    $emp_id = $emp_list[$index]['EMP_ID'];
-    $name = $emp_list[$index]['NAME'];
-    $email = $emp_list[$index]['EMAIL'];
-    $phoneno = $emp_list[$index]['PHONENO'];
-    $address = $emp_list[$index]['ADDRESS'];
-    $salary = $emp_list[$index]['SALARY'];
-    $hire_date = $emp_list[$index]['HIRE_DATE'];
-    $allowance = $emp_list[$index]['ALLOWANCE'];
-    $job = $emp_list[$index]['JOB_ID'];
-  }
-} else if (isset($_POST['parttime'])) {
-  $edit = true;
-  $emp_list = $con->query(
-    "Select e.emp_id,e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,p.hourly_rate
+    if ($emp_list != null) {
+        $index = $_POST['row'] - 1;
+        $emp_id = $emp_list[$index]['EMP_ID'];
+        $name = $emp_list[$index]['NAME'];
+        $email = $emp_list[$index]['EMAIL'];
+        $phoneno = $emp_list[$index]['PHONENO'];
+        $address = $emp_list[$index]['ADDRESS'];
+        $salary = $emp_list[$index]['SALARY'];
+        $hire_date = $emp_list[$index]['HIRE_DATE'];
+        $allowance = $emp_list[$index]['ALLOWANCE'];
+        $job = $emp_list[$index]['JOB_ID'];
+    }
+} elseif (isset($_POST['parttime'])) {
+    $edit = true;
+    $emp_list = $con->query(
+    'Select e.emp_id,e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_id,p.hourly_rate
     FROM employee e join part_time p on e.emp_id = p.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
-    order by e.emp_id asc",
+    order by e.emp_id asc',
     [$logged_in]
   );
 
-  if ($emp_list != null) {
-    $index =  $_POST['row'] - 1;
-    $emp_id = $emp_list[$index]['EMP_ID'];
-    $name = $emp_list[$index]['NAME'];
-    $email = $emp_list[$index]['EMAIL'];
-    $phoneno = $emp_list[$index]['PHONENO'];
-    $address = $emp_list[$index]['ADDRESS'];
-    $salary = $emp_list[$index]['SALARY'];
-    $hire_date = $emp_list[$index]['HIRE_DATE'];
-    $hourly_rate = $emp_list[$index]['HOURLY_RATE'];
-    $job = $emp_list[$index]['JOB_ID'];
-  }
+    if ($emp_list != null) {
+        $index = $_POST['row'] - 1;
+        $emp_id = $emp_list[$index]['EMP_ID'];
+        $name = $emp_list[$index]['NAME'];
+        $email = $emp_list[$index]['EMAIL'];
+        $phoneno = $emp_list[$index]['PHONENO'];
+        $address = $emp_list[$index]['ADDRESS'];
+        $salary = $emp_list[$index]['SALARY'];
+        $hire_date = $emp_list[$index]['HIRE_DATE'];
+        $hourly_rate = $emp_list[$index]['HOURLY_RATE'];
+        $job = $emp_list[$index]['JOB_ID'];
+    }
 }
 
 if ($job !== '[null,""]') {
-  for ($i = 0; $i < $howmanyjob; $i++) {
-    if ($job == $job_title[$i]['JOB_ID']) {
-      $job = "[$i,\"" . $job_title[$i]['JOB_TITLE'] . "\"]";
+    for ($i = 0; $i < $howmanyjob; ++$i) {
+        if ($job == $job_title[$i]['JOB_ID']) {
+            $job = "[$i,\"".$job_title[$i]['JOB_TITLE'].'"]';
+        }
     }
-  }
 }
 ?>
 <!DOCTYPE html>
@@ -80,6 +80,7 @@ if ($job !== '[null,""]') {
 
 <head>
   <title>2r2 Mart</title>
+  <link rel="icon" href="img/logo2.png"></title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/bootstrap.min.css" />
@@ -107,15 +108,15 @@ if ($job !== '[null,""]') {
   <div id="content">
     <div id="content-header">
       <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current"><?php if ($edit) {
-                                                                                                                                                            echo 'Edit Employee';
-                                                                                                                                                          } else {
-                                                                                                                                                            echo 'Register Employee';
-                                                                                                                                                          } ?></a> </div>
+    echo 'Edit Employee';
+} else {
+    echo 'Register Employee';
+} ?></a> </div>
       <h1><?php if ($edit) {
-            echo 'Edit Employee';
-          } else {
-            echo 'Register Employee';
-          } ?></h1>
+    echo 'Edit Employee';
+} else {
+    echo 'Register Employee';
+} ?></h1>
     </div>
     <div class="container-fluid">
       <hr>
@@ -128,59 +129,62 @@ if ($job !== '[null,""]') {
             <div class="widget-content nopadding">
               <form name="form1" action="
                                           <?php if ($edit) {
-                                            echo 'edit_employee.php';
-                                          } else {
-                                            echo 'registerprocess.php';
-                                          } ?>
+    echo 'edit_employee.php';
+} else {
+    echo 'registerprocess.php';
+} ?>
                                         " method="POST" class="form-horizontal" onsubmit="return validateEmail(document.form1.email.value)" <?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>>
                 <div class="control-group">
                   <label class="control-label">Name :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="empname" value="<?php echo $name ?>" required />
+                    <input type="text" class="span11" name="empname" value="<?php echo $name; ?>" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Email :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="email" value="<?php echo $email ?>" required />
+                    <input type="text" class="span11" name="email" value="<?php echo $email; ?>" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Address :</label>
                   <div class="controls">
-                    <input type="text" class="span11" name="address" value="<?php echo $address ?>" required />
+                    <input type="text" class="span11" name="address" value="<?php echo $address; ?>" required />
                   </div>
                 </div>
 
                 <div class="control-group">
                   <label class="control-label">Phone Number :</label>
                   <div class="controls ">
-                    <input type="text" class="span5" name="phoneNO" value="<?php echo $phoneno ?>" required />
+                    <input type="text" class="span5" name="phoneNO" value="<?php echo $phoneno; ?>" required />
                   </div>
                 </div>
-
-                <div class="control-group">
-                  <label class="control-label">Password :</label>
-                  <div class="controls ">
-                    <input type="password" class="span5" name="password" required />
+                <?php if (!$edit) { ?>
+                  <div class="control-group">
+                    <label class="control-label">Password :</label>
+                    <div class="controls ">
+                      <input type="password" class="span5" name="password" required />
+                    </div>
                   </div>
-                </div>
+                <?php } ?>
 
                 <div class="control-group">
                   <label class="control-label">Salary :</label>
                   <div class="controls ">
-                    <input type="text" class="span5" name="salary" value="<?php echo $salary ?>" required />
+                    <input type="text" class="span5" name="salary" value="<?php echo $salary; ?>" required />
                   </div>
                 </div>
-                <?php if ($edit) { ?>
-                  <input type="hidden" name="empid" value="<?php echo $emp_id;  ?>" />
-                <?php }  ?>
+                <?php if ($edit) {
+    ?>
+                  <input type="hidden" name="empid" value="<?php echo $emp_id; ?>" />
+                <?php
+}  ?>
                 <div class="control-group">
                   <label class="control-label">Hire Date :</label>
                   <div class="controls">
-                    <input type="date" class="" name="hiredate" value="<?php echo date_format(date_create($hire_date), "Y-m-d"); ?>" required />
+                    <input type="date" class="" name="hiredate" value="<?php echo date_format(date_create($hire_date), 'Y-m-d'); ?>" required />
                   </div>
                 </div>
 
@@ -190,11 +194,12 @@ if ($job !== '[null,""]') {
                     <select id="jobPosition" class="span5 " name="jobPosition" required>
                       <option value='[null,""]'>Choose job position</option>
                       <?php if ($job_title != null) {
-                        for ($i = 0; $i < $howmanyjob; $i++) {
-                      ?>
-                          <option value='<?php echo "[$i,\"" . $job_title[$i]['JOB_TITLE'] . "\"]" ?>'><?php echo ucfirst(strtolower($job_title[$i]['JOB_TITLE'])) ?></option>
-                      <?php }
-                      } ?>
+        for ($i = 0; $i < $howmanyjob; ++$i) {
+            ?>
+                          <option value='<?php echo "[$i,\"".$job_title[$i]['JOB_TITLE'].'"]'; ?>'><?php echo ucfirst(strtolower($job_title[$i]['JOB_TITLE'])); ?></option>
+                      <?php
+        }
+    } ?>
                     </select>
                   </div>
                 </div>
@@ -204,11 +209,11 @@ if ($job !== '[null,""]') {
                     <select id="timeType" class="span5 " name="employeeType" required>
                       <option value=" ">Choose employee type</option>
                       <option value="fullTime" <?php if (isset($_POST['fulltime'])) {
-                                                  echo "selected";
-                                                } ?>>Full Time</option>
+        echo 'selected';
+    } ?>>Full Time</option>
                       <option value="partTime" <?php if (isset($_POST['parttime'])) {
-                                                  echo "selected";
-                                                } ?>>Part Time</option>
+        echo 'selected';
+    } ?>>Part Time</option>
                     </select>
                   </div>
                 </div>
@@ -216,14 +221,14 @@ if ($job !== '[null,""]') {
                 <div class="control-group" id="Allowance" style="display: none">
                   <label class="control-label">Allowance :</label>
                   <div class="controls">
-                    <input type="text" name="allowance" value="<?php echo $allowance ?>" class="span5" placeholder="Allowance" />
+                    <input type="text" name="allowance" value="<?php echo $allowance; ?>" class="span5" placeholder="Allowance" />
                   </div>
                 </div>
 
                 <div class="control-group" id="hourlySalary" style="display: none">
                   <label class="control-label">Hourly Rate :</label>
                   <div class="controls">
-                    <input type="text" name="hourlyrate" class="span5" value="<?php echo $hourly_rate ?>" placeholder="Hourly Rate" />
+                    <input type="text" name="hourlyrate" class="span5" value="<?php echo $hourly_rate; ?>" placeholder="Hourly Rate" />
                   </div>
                 </div>
 
@@ -298,7 +303,7 @@ if ($job !== '[null,""]') {
       });
     });
     $(document).ready(function() {
-      $("#jobPosition").val('<?php echo $job ?>');
+      $("#jobPosition").val('<?php echo $job; ?>');
       $("#jobPosition").trigger("change");
     });
   </script>

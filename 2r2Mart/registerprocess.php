@@ -54,7 +54,6 @@ if (isset($_POST['submit'])) {
             $compareemailvalid = validateEmail($compareemail[$c][0]);
             if ($email === $compareemail[$c][0] && ($compareemailvalid == true)) {
                 echo "<script language='javascript'>window.location='register_employee.php';alert('The Email Already Exist');</script>";
-                die();
             }
         }
         if ($validphoneno != '') {
@@ -65,7 +64,6 @@ if (isset($_POST['submit'])) {
                 $convert2 = (int) $validphoneno;
                 if ($convert == $convert2) {
                     echo "<script language='javascript'>window.location='register_employee.php';alert('The Phone Number Already Exist');</script>";
-                    (die);
                 }
             }
 
@@ -87,7 +85,6 @@ if (isset($_POST['submit'])) {
                         } else {
                             if ($emptype == 'fullTime' && ($allowanceform == null || $allowanceform == '')) {
                                 echo "<script language='javascript'>window.location='register_employee.php';alert('Incorrect Allowance Input');</script>";
-                                die();
                             }
                         }
                         if ($emptype == 'partTime' && $hourlyform == true) {
@@ -98,27 +95,21 @@ if (isset($_POST['submit'])) {
                         } else {
                             if ($emptype == 'partTime' && ($hourlyform == null || $hourlyform == '')) {
                                 echo "<script language='javascript'>window.location='register_employee.php';alert('Incorrect Hourly Rate Input');</script>";
-                                die();
                             }
                         }
                     }
                 } else {
                     echo "<script language='javascript'>window.location='register_employee.php';alert('Incorrect Salary Input');</script>";
-                    die();
                 }
             } else {
                 echo "<script language='javascript'>window.location='register_employee.php';alert('$validpass');</script>";
-                die();
             }
         } else {
             echo "<script language='javascript'>window.location='register_employee.php';alert('Incorrect Phone Number');</script>";
-            die();
         }
     } else {
         echo "<script language='javascript'>window.location='register_employee.php';alert('Incorrect Email format');</script>";
-        die();
     }
 } else {
     echo "<script language='javascript'>window.location='index.php';alert('Ungranted User Detected');</script>";
-    die();
 }
