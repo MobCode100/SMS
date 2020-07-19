@@ -15,8 +15,11 @@ if (isset($_POST['fulltime']) && isset($_POST['row'])) {
     $emp_list = $con->query("select e.emp_id from employee e join full_time f on e.emp_id = f.emp_id where e.emp_id != ? order by e.emp_id asc", [$logged_in]);
     if ($emp_list != null) {
         $emp_id = $_POST['row'] - 1;
-        $con->query("delete from employee where emp_id = ?", [$emp_list[$emp_id]['EMP_ID']]);
-        echo "<script>window.location='view_employee.php';alert ('Deleted successfully!') ;</script>";
+        $supervisee = $con->query("SELECT * FROM EMPLOYEE WHERE SUPERVISOR_ID = ?", [$emp_list[$emp_id]['EMP_ID']]);
+        if ($supervisee == null) {
+            $con->query("delete from employee where emp_id = ?", [$emp_list[$emp_id]['EMP_ID']]);
+            echo "<script>window.location='view_employee.php';alert ('Deleted successfully!') ;</script>";
+        } else echo "<script>window.location='view_employee.php?t=1&message=This employee is still supervising someone';</script>";
     }
 } else if (isset($_POST['parttime'])) {
     $emp_list = $con->query("select e.emp_id from employee e join part_time p on e.emp_id = p.emp_id where e.emp_id != ? order by e.emp_id asc", [$logged_in]);
