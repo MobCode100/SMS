@@ -1,5 +1,5 @@
 <a href="dashboard.php">
-  <div id="header" width="200px" height="200px">
+  <div id="header">
     <h1>2r2 Mart</h1>
   </div>
 </a>

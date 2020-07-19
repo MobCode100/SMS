@@ -24,7 +24,7 @@ if(isset($_SESSION['EMP_ID'])){
     <div id="loginbox">
         <form id="loginform" class="form-vertical" method="post" action="loginp.php">
             <div class="control-group normal_text">
-                <h3><img src="img/logo2.png" alt="Logo" /> </h3>
+                <h3><img src="img/logo.png" alt="Logo" /> </h3>
             </div>
             <div class="control-group">
                 <div class="controls">
