@@ -57,7 +57,7 @@ if (isset($_SESSION['EMP_ID'])) {
             $id = "myModalError";
     ?>
             <div id="myModalError" class="modal hide">
-                <div class="modal-header" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px">
+                <div class="modal-header" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
                     <button class="close" data-dismiss="modal">×</button>
                     <strong>Error!</strong> &nbsp;<?php echo $_GET['message'] ?>
                 </div>
@@ -66,7 +66,7 @@ if (isset($_SESSION['EMP_ID'])) {
             $id = "myModalSuccess";
         ?>
             <div id="myModalSuccess" class="modal hide">
-                <div class="modal-header" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px">
+                <div class="modal-header" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
                     <button class="close" data-dismiss="modal">×</button>
                     <strong>Success!</strong> &nbsp;<?php echo $_GET['message'] ?>
                 </div>

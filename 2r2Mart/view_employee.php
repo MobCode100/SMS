@@ -217,13 +217,13 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
       </div>
     </div>
   </div>
-  <div id="myAlert" class="modal hide">
-    <div class="modal-header">
+  <div id="myAlert" class="modal hide" style="font-size:15px">
+    <div class="modal-header" style="border-radius:6px 6px 0 0;">
       <button data-dismiss="modal" class="close" type="button">×</button>
-      <h3>Delete confirmation</h3>
+      <h3 style="font-size:15px">Delete confirmation</h3>
     </div>
     <div class="modal-body" >
-      <p id="deletedialog">Are you sure you want to delete </p>
+      <p id="deletedialog"></p>
     </div>
     <div class="modal-footer"> <a data-dismiss="modal" id="confirmButton" class="btn btn-primary">Confirm</a> <a data-dismiss="modal" class="btn">Cancel</a> </div>
   </div>
@@ -257,7 +257,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
     });
 
     function confirm(id, name) {
-      $('#deletedialog').html($('#deletedialog').html() + name + "?");
+      $('#deletedialog').html('Are you sure you want to delete ' + name + "?");
       $("#confirmButton").click(function() {
         $("#"+id).trigger("submit");
       });

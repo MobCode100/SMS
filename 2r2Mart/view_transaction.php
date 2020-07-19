@@ -103,13 +103,13 @@ preload('all');
     </div>
   </div>
 
-  <div id="myAlert" class="modal hide">
-    <div class="modal-header">
+  <div id="myAlert" class="modal hide" style="font-size:15px">
+    <div class="modal-header" style="border-radius:6px 6px 0 0">
       <button data-dismiss="modal" class="close" type="button">×</button>
-      <h3>Delete confirmation</h3>
+      <h3 style="font-size:15px">Delete confirmation</h3>
     </div>
     <div class="modal-body">
-      <p id="deletedialog">Are you sure you want to delete this record? <br></p>
+      <p id="deletedialog"></p>
     </div>
     <div class="modal-footer"> <a data-dismiss="modal" id="confirmButton" class="btn btn-primary">Confirm</a> <a data-dismiss="modal" class="btn">Cancel</a> </div>
   </div>
@@ -124,7 +124,7 @@ preload('all');
   <script src="js/matrix.tables.js"></script>
   <script>
     function confirm(id, name,quantity) {
-      $('#deletedialog').html($('#deletedialog').html() + 'No: '+ id + '<br>' +'Name: ' + name + '<br>' + 'Quantity: ' + quantity);
+      $('#deletedialog').html('Are you sure you want to delete this record? <br>No: '+ id + '<br>' +'Name: ' + name + '<br>' + 'Quantity: ' + quantity);
       $("#confirmButton").click(function() {
         $("#"+id).trigger("submit");
       });

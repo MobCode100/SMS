@@ -97,7 +97,7 @@ preload('all');
       </div>
     </div>
     <div id="myModalError" class="modal hide">
-      <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px">
+      <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
         <button class="close" data-dismiss="modal">×</button>
         <strong>Error!</strong> &nbsp;
       </div>
