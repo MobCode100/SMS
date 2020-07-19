@@ -13,12 +13,11 @@ $currentpage = basename($_SERVER["PHP_SELF"], '.php');
   <ul>
     <li class="<?php currentbar($currentpage,['dashboard'])?>"><a href="dashboard.php"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
 
-    <li class="submenu <?php currentbar($currentpage,['register_employee','assign_supervisor','view_supervisor','view_employee'])?>"> <a><i class="icon icon-user"></i> <span>Employee</span></a>
+    <li class="submenu <?php currentbar($currentpage,['register_employee','assign_supervisor','view_employee'])?>"> <a><i class="icon icon-user"></i> <span>Employee</span></a>
       <ul>
         <li <?php hidebar(1) ?>><a href="register_employee.php">Register Employee</a></li>
         <li><a href="view_employee.php">View Employee</a></li>
         <li <?php hidebar(1) ?>><a href="assign_supervisor.php">Assign Supervisor</a></li>
-        <li <?php hidebar(1) ?>><a href="view_supervisor.php">View Supervisor</a></li>
       </ul>
     </li>
 
