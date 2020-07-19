@@ -96,6 +96,12 @@ preload('all');
         </div>
       </div>
     </div>
+    <div id="myModalError" class="modal hide">
+      <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px">
+        <button class="close" data-dismiss="modal">×</button>
+        <strong>Error!</strong> &nbsp;
+      </div>
+    </div>
 
   </div>
   <!--Footer-part-->
@@ -132,15 +138,18 @@ preload('all');
           if (nP === cP) {
             return true;
           } else {
-            alert("New passwords do not match!");
+            $('#error_text').html('<button class="close" data-dismiss="modal">×</button><strong>Error!</strong> &nbsp;New passwords do not match!');
+            $('#myModalError').modal('show');
             return false;
           }
         } else {
-          alert("Name found in new password!");
+          $('#error_text').html('<button class="close" data-dismiss="modal">×</button><strong>Error!</strong> &nbsp;Name found in new password!');
+          $('#myModalError').modal('show');
           return false;
         }
       } else {
-        alert("Password must be longer than 7 characters!");
+        $('#error_text').html('<button class="close" data-dismiss="modal">×</button><strong>Error!</strong> &nbsp;Password must be longer than 7 characters!');
+        $('#myModalError').modal('show');
         return false;
       }
     }
