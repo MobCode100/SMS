@@ -1,7 +1,7 @@
 <?php
 require 'functions.php'; // Satu file yang simpan macam2 functions kita
 session_start();
-/* 
+/*
   Function preload ni akan restrict user daripada access page
   Since kita ada 2 jenis user sahaja, values accepted:
   'all' maksudnya semua users/jobs boleh access page ni
@@ -37,46 +37,101 @@ preload('all');
   <div id="content">
     <div id="content-header">
       <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Dashboard</a> </div>
-      <h1>Dashboard</h1>
     </div>
     <div class="container-fluid">
-      <hr>
       <div class="row-fluid">
         <div class="span12">
-
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-              <h5>Cureent Employee</h5>
+          <table align="center" border=0>
+            <tr>
+            <th>
+            <img alt="welcome.png" src="img/welcome.png">
+            </th>
+          </tr>
+          <tr>
+          <th>
+          <marquee> THIS WEBSITE IS MADE TO EASE THE PROCESS OF PRODUCTS' STOCK IN BY 2R2 MART </marquee>
+          </th>
+          </tr>
+          </table>
+          <div class="widget-box">
+            <div class="widget-title"> <span class="icon"><button type="submit" class="btn-primary"><i class="icon-shopping-cart"></i></button></span>
+              <h5>All Product</h5>
             </div>
             <div class="widget-content nopadding">
               <table class="table table-bordered data-table">
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Phone No</th>
-                    <th>Hire Date</th>
-                    <th>Salary (RM)</th>
-                    <th>Pay Type</th>
-                    <th>Daily Work Hour</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Supplier</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="gradeX">
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                  </tr>
+                  <?php
+                  require("Connection.php");
+                  $con = new Connection();
+                  $all_product = $con->query("select p.name,p.description,p.price,p.quantity,s.name supplier
+                  from product p join supplier s on s.supplier_id = p.supplier_id", []);
+                  if ($all_product != null) {
+                    for ($i = 0; $i < count($all_product); $i++) {
+                  ?>
+                      <tr class="gradeX">
+                        <td><?php echo $all_product[$i]['NAME'] ?></td>
+                        <td><?php echo $all_product[$i]['DESCRIPTION'] ?></td>
+                        <td><?php echo $all_product[$i]['PRICE'] ?></td>
+                        <td><?php echo $all_product[$i]['QUANTITY'] ?></td>
+                        <td><?php echo $all_product[$i]['SUPPLIER'] ?></td>
+                      </tr>
+                  <?php
+                    }
+                  }
+                  ?>
                 </tbody>
               </table>
             </div>
           </div>
+          <hr>
+          <div class="widget-box">
+            <div class="widget-title"> <span class="icon"><button type="submit" class="btn-danger"><i class="icon-warning-sign"></i></button></span>
+              <h5>Low Stock Product</h5>
+            </div>
+            <div class="widget-content nopadding">
+              <table class="table table-bordered data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Supplier</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  if ($all_product != null) {
+                    for ($i = 0; $i < count($all_product); $i++) {
+                      if ($all_product[$i]['QUANTITY'] <= 50) {
+                  ?>
+                        <tr class="gradeX">
+                          <td><?php echo $all_product[$i]['NAME'] ?></td>
+                          <td><?php echo $all_product[$i]['DESCRIPTION'] ?></td>
+                          <td><?php echo $all_product[$i]['PRICE'] ?></td>
+                          <td><?php echo $all_product[$i]['QUANTITY'] ?></td>
+                          <td><?php echo $all_product[$i]['SUPPLIER'] ?></td>
+                        </tr>
+                  <?php
+                      }
+                    }
+                  }
+                  ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+</div>
         </div>
       </div>
     </div>

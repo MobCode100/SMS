@@ -20,7 +20,7 @@
 .datepicker:after {
 	content: '';
 	display: inline-block;
-	
+
 }
 .datepicker > div {
 	display: none;
@@ -33,7 +33,7 @@
 	text-align: center;
 	width: 20px;
 	height: 20px;
-	
+
 }
 .datepicker td.day:hover {
 	background: #eeeeee;

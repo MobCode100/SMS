@@ -1,13 +1,29 @@
 <?php
 require 'functions.php'; // Satu file yang simpan macam2 functions kita
 session_start();
-/* 
+/*
   Function preload ni akan restrict user daripada access page
   Since kita ada 2 jenis user sahaja, values accepted:
   'all' maksudnya semua users/jobs boleh access page ni
   1 maksudnya job_id = 1 = MANAGER sahaja yang boleh access
 */
 preload('all');
+require("Connection.php");
+$con = new Connection();
+$page_title = "Transaction";
+$action = "insert_transaction.php";
+$product = '0';
+$quantity = 0;
+if (isset($_POST['edit'])) {
+  $tid = $_POST['id'];
+  $page_title = "Edit Transaction";
+  $action = "edit_transaction.php";
+  $data = $con->query("SELECT * FROM TRANSACTION WHERE transaction_id = ?", [$tid]);
+  if ($data != null) {
+    $product = $data[0]['PRODUCT_ID'];
+    $quantity = $data[0]['QUANTITY'];
+  }
+}
 ?>
 <html lang="en">
 
@@ -34,83 +50,87 @@ preload('all');
 
   <div id="content">
     <div id="content-header">
-      <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Transaction</a> </div>
-      <h1>Transaction</h1>
+      <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current"><?php echo $page_title ?></a> </div>
+      <h1><?php echo $page_title ?></h1>
     </div>
 
     <div class="container-fluid">
       <hr>
       <div class="row-fluid">
-        <div class="span12">
+        <div class="span9" id="formT">
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-              <h5>Transaction</h5>
+            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+              <h5>Stock In</h5>
             </div>
             <div class="widget-content nopadding">
-              <table class="table table-bordered data-table">
-                <thead>
-                  <tr>
-                    <th>Add</th>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <form>
-                    <tr class="gradeX">
-                      <td>
-                        <p>
-                          <center>
-                            <button class="icon-plus" class="btn btn-success"></button>
-                        </p>
-                      </td>
-                      <td>
-                        <p>
-                          <center>
-                            <div class="control-group">
-
-                              <div class="controls">
-                                <select>
-                                  <option>Choose product</option>
-                                </select>
-                              </div>
-                            </div>
-
-                        </p>
-                      </td>
-
-                      <td>
-                        <p>
-                          <center>
-                            <input type="text" class="span3" />
-                        </p>
-                      </td>
-                      <td>
-                        <p>
-                          <center><button type="submit" class="btn btn-success">Submit</button>
-                        </p>
-                      </td>
-                    </tr>
-                  </form>
-                </tbody>
-              </table>
+              <form action="<?php echo $action ?>" method="post" class="form-horizontal" onsubmit="return Submit()">
+                <?php if (isset($_POST['edit'])) {
+                  if ($data != null) { ?>
+                    <input type="hidden" name="tid" value="<?php echo $tid; ?>" />
+                    <input type="hidden" name="old_product" value="<?php echo $product; ?>" />
+                    <input type="hidden" name="old_quantity" value="<?php echo $quantity; ?>" />
+                <?php }
+                } ?>
+                <div class="control-group">
+                  <label class="control-label">Product</label>
+                  <div class="controls">
+                    <select class="span5" name="product" id="select_p">
+                      <option value="0">Select a product</option>
+                      <?php
+                      $products = $con->query("select * from product", []);
+                      if ($products != null) {
+                        for ($i = 0; $i < count($products); $i++) {
+                      ?>
+                          <option value="<?php echo $products[$i]['PRODUCT_ID'] ?>"><?php echo $products[$i]['NAME'] ?></option>
+                      <?php }
+                      } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">Quantity</label>
+                  <div class="controls">
+                    <input type="number" min="1" placeholder="Quantity" name="quantity" value="<?php echo $quantity ?>" class="span5" required>
+                  </div>
+                </div>
+                <div class="form-actions" align="right">
+                  <button type="submit" name="sBut" class="btn btn-success">Submit</button>
+                </div>
+              </form>
             </div>
           </div>
+
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 
   <script src="js/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#select_p").val('<?php echo $product ?>');
+    });
+
+    function Submit() {
+      console.log(document.getElementById('select_p').value);
+      var val = document.getElementById('select_p').value
+      if (val == 0) {
+        alert("Please select a product!");
+        return false;
+      } else {
+        return true;
+      }
+    }
+    var Width = $('#formT').width();
+    $("#formT").css("margin-left", "calc((100% - " + Width + "px)/2)");
+  </script>
   <script src="js/jquery.ui.custom.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.uniform.js"></script>
   <script src="js/select2.min.js"></script>
-  <script src="js/jquery.dataTables.min.js"></script>
   <script src="js/matrix.js"></script>
-  <script src="js/matrix.tables.js"></script>
+  <script src="js/matrix.form_common.js"></script>
 </body>
 
 </html>

@@ -23,6 +23,11 @@ preload('all');
   <link rel="stylesheet" href="css/matrix-media.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <style>
+    .tableform {
+      display: inline
+    }
+  </style>
 </head>
 
 <body>
@@ -43,26 +48,50 @@ preload('all');
         <div class="span12">
           <div class="widget-box">
             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-              <h5>Cureent Transaction</h5>
+              <h5>Transactions</h5>
             </div>
             <div class="widget-content nopadding">
               <table class="table table-bordered data-table">
                 <thead>
                   <tr>
-                    <th>No.</th>
-                    <th>Date</th>
+                    <th>No</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
+                    <th>Date</th>
                     <th>Staff Name</th>
+                    <th>Action</th>
                 </thead>
                 <tbody>
-                  <tr class="gradeX">
-                    <td>No.</td>
-                    <td>Date</td>
-                    <td>Product Name</td>
-                    <td>Quantity</td>
-                    <td>Staff Name</td>
-                  </tr>
+                  <?php
+                  require("Connection.php");
+                  $con = new Connection();
+                  $trns = $con->query("SELECT t.transaction_id,e.name, p.name p_name, t.quantity,to_char(t.date_time,'DD-MM-YYYY HH:MI:SS AM') time
+                    from transaction t join employee e on t.emp_id = e.emp_id join product p on p.product_id = t.product_id", []);
+                  if ($trns != null) {
+                    for ($i = 0; $i < count($trns); $i++) {
+                  ?>
+                      <tr class="gradeX">
+                        <td><?php echo $i+1 ?></td>
+                        <td><?php echo $trns[$i]['P_NAME'] ?></td>
+                        <td><?php echo $trns[$i]['QUANTITY']  ?></td>
+                        <td><?php echo $trns[$i]['TIME'] ?></td>
+                        <td><?php echo $trns[$i]['NAME'] ?></td>
+                        <td>
+                          <p>
+                            <center>
+                              <form class="tableform" action="add_transaction.php" method="post">
+                                <input type="hidden" value="<?php echo $trns[$i]['TRANSACTION_ID']; ?>" name="id" />
+                                <button class="btn btn-warning" name="edit">Edit</button>
+                              </form>
+                              <form class="tableform" action="delete_transaction.php" method="post" onsubmit="return deleteConfirmation()">
+                                <input type="hidden" value="<?php echo $trns[$i]['TRANSACTION_ID']; ?>" name="id" />
+                                <button class="btn btn-danger" name="delete">Delete</button>
+                              </form>
+                          </p>
+                        </td>
+                      </tr>
+                  <?php }
+                  } ?>
                 </tbody>
               </table>
             </div>
@@ -80,6 +109,11 @@ preload('all');
   <script src="js/jquery.dataTables.min.js"></script>
   <script src="js/matrix.js"></script>
   <script src="js/matrix.tables.js"></script>
+  <script>
+    function deleteConfirmation($name) {
+      return confirm("Are you sure to delete?");
+    }
+  </script>
 </body>
 
 </html>
