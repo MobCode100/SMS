@@ -103,7 +103,7 @@ if (isset($_POST['submit'])) {
                         }
                         if ($emptype == 'partTime' && $hourlyform == true) {
                             $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,PASSWORD=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=?,SUPERVISOR_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $pass, $salary, $hiredate, $jobposition[0], $supervisorid, $empid]);
-                            $con->query('UPDATE FULL_TIME SET HOURLY_RATE=? WHERE EMP_ID=?', [$hourlyrate, $empid]);
+                            $con->query('UPDATE PART_TIME SET HOURLY_RATE=? WHERE EMP_ID=?', [$hourlyrate, $empid]);
                             echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
                         } else {
                             if ($emptype == 'partTime' && ($hourlyform == null || $hourlyform == '')) {
