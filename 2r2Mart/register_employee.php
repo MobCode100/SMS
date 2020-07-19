@@ -160,13 +160,14 @@ if ($job !== '[null,""]') {
                     <input type="text" class="span5" name="phoneNO" value="<?php echo $phoneno ?>" required />
                   </div>
                 </div>
-
-                <div class="control-group">
-                  <label class="control-label">Password :</label>
-                  <div class="controls ">
-                    <input type="password" class="span5" name="password" required />
+                <?php if (!$edit) { ?>
+                  <div class="control-group">
+                    <label class="control-label">Password :</label>
+                    <div class="controls ">
+                      <input type="password" class="span5" name="password" required />
+                    </div>
                   </div>
-                </div>
+                <?php } ?>
 
                 <div class="control-group">
                   <label class="control-label">Salary :</label>
