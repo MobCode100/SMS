@@ -8,6 +8,22 @@ session_start();
   1 maksudnya job_id = 1 = MANAGER sahaja yang boleh access
 */
 preload('all');
+require("Connection.php");
+$con = new Connection();
+$page_title = "Transaction";
+$action = "insert_transaction.php";
+$product = '0';
+$quantity = 0;
+if (isset($_POST['edit'])) {
+  $tid = $_POST['id'];
+  $page_title = "Edit Transaction";
+  $action = "edit_transaction.php";
+  $data = $con->query("SELECT * FROM TRANSACTION WHERE transaction_id = ?", [$tid]);
+  if ($data != null) {
+    $product = $data[0]['PRODUCT_ID'];
+    $quantity = $data[0]['QUANTITY'];
+  }
+}
 ?>
 <html lang="en">
 
@@ -23,36 +39,6 @@ preload('all');
   <link rel="stylesheet" href="css/matrix-media.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-
-<style>
-#t01{
-  margin: 35px;
-  padding: 10px;
-  border-spacing: 10px;
-}
-
-#dataTable, th, td {
-
-  padding: 5px;
-}
-#dataTable {
-  border-spacing: 10px;
-  margin: 35px;
-}
-/* #t01{
-  margin: 35px;
-  padding: 10px;
-  border-spacing: 10px;
-}
-
-#dataTable {
-  margin: 35px;
-  padding: 10px;
-  border-spacing: 20px;
-} */
-
-
-</style>
 </head>
 
 <body>
@@ -64,116 +50,87 @@ preload('all');
 
   <div id="content">
     <div id="content-header">
-      <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Transaction</a> </div>
-      <h1>Transaction</h1>
+      <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current"><?php echo $page_title ?></a> </div>
+      <h1><?php echo $page_title ?></h1>
     </div>
 
     <div class="container-fluid">
       <hr>
       <div class="row-fluid">
-        <div class="span12">
+        <div class="span9" id="formT">
           <div class="widget-box">
             <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
               <h5>Stock In</h5>
             </div>
             <div class="widget-content nopadding">
-              <form form class="" action="index.html" method="post">
-
-                <table id=t01>
-                  <tr>
-                    <td><INPUT type="button" value="Add Row" onclick="addRow('dataTable')" /></td>
-                    <td><INPUT  type="button" value="Delete Row" onclick="deleteRow('dataTable')" /></td>
-                  </tr>
-                </table>
-
-                <TABLE id="dataTable" >
-              		<TR>
-
-              			<TD><INPUT type="checkbox" name="chk"/></TD>
-              			<TD>
-              				Product:
-              				<SELECT name="product">
-              					<OPTION value=" ">Choose a Product 1</OPTION>
-                        <OPTION value=" ">Choose a Product 2</OPTION>
-                        <OPTION value=" ">Choose a Product 3</OPTION>
-
-              				</SELECT>
-
-              			</TD><p></p>
-              			<TD>Quantity: <INPUT type="text" name="txt"/></TD>
-              		</TR>
-              	</TABLE>
-
-
-
-                <div align="right" class="form-actions">
-                  <button type="submit" class="btn btn-success">Submit</button>
+              <form action="<?php echo $action ?>" method="post" class="form-horizontal" onsubmit="return Submit()">
+                <?php if (isset($_POST['edit'])) {
+                  if ($data != null) { ?>
+                    <input type="hidden" name="tid" value="<?php echo $tid; ?>" />
+                    <input type="hidden" name="old_product" value="<?php echo $product; ?>" />
+                    <input type="hidden" name="old_quantity" value="<?php echo $quantity; ?>" />
+                <?php }
+                } ?>
+                <div class="control-group">
+                  <label class="control-label">Product</label>
+                  <div class="controls">
+                    <select class="span5" name="product" id="select_p">
+                      <option value="0">Select a product</option>
+                      <?php
+                      $products = $con->query("select * from product", []);
+                      if ($products != null) {
+                        for ($i = 0; $i < count($products); $i++) {
+                      ?>
+                          <option value="<?php echo $products[$i]['PRODUCT_ID'] ?>"><?php echo $products[$i]['NAME'] ?></option>
+                      <?php }
+                      } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">Quantity</label>
+                  <div class="controls">
+                    <input type="number" min="1" placeholder="Quantity" name="quantity" value="<?php echo $quantity ?>" class="span5" required>
+                  </div>
+                </div>
+                <div class="form-actions" align="right">
+                  <button type="submit" name="sBut" class="btn btn-success">Submit</button>
                 </div>
               </form>
             </div>
           </div>
+
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 
-  <SCRIPT language="javascript">
-    function addRow(tableID) {
+  <script src="js/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#select_p").val('<?php echo $product ?>');
+    });
 
-      var table = document.getElementById(tableID);
-
-      var rowCount = table.rows.length;
-      var row = table.insertRow(rowCount);
-
-      var colCount = table.rows[0].cells.length;
-
-      for(var i=0; i<colCount; i++) {
-
-        var newcell	= row.insertCell(i);
-
-        newcell.innerHTML = table.rows[0].cells[i].innerHTML;
-        //alert(newcell.childNodes);
-        switch(newcell.childNodes[0].type) {
-          case "text":
-              newcell.childNodes[0].value = "";
-              break;
-          case "checkbox":
-              newcell.childNodes[0].checked = false;
-              break;
-          case "select-one":
-              newcell.childNodes[0].selectedIndex = 0;
-              break;
-        }
+    function Submit() {
+      console.log(document.getElementById('select_p').value);
+      var val = document.getElementById('select_p').value
+      if (val == 0) {
+        alert("Please select a product!");
+        return false;
+      } else {
+        return true;
       }
     }
-
-    function deleteRow(tableID) {
-      try {
-      var table = document.getElementById(tableID);
-      var rowCount = table.rows.length;
-
-      for(var i=0; i<rowCount; i++) {
-        var row = table.rows[i];
-        var chkbox = row.cells[0].childNodes[0];
-        if(null != chkbox && true == chkbox.checked) {
-          if(rowCount <= 1) {
-            alert("Cannot delete all the rows.");
-            break;
-          }
-          table.deleteRow(i);
-          rowCount--;
-          i--;
-        }
-
-
-      }
-      }catch(e) {
-        alert(e);
-      }
-    }
-
-  </SCRIPT>
+    var Width = $('#formT').width();
+    $("#formT").css("margin-left", "calc((100% - " + Width + "px)/2)");
+  </script>
+  <script src="js/jquery.ui.custom.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.uniform.js"></script>
+  <script src="js/select2.min.js"></script>
+  <script src="js/matrix.js"></script>
+  <script src="js/matrix.form_common.js"></script>
 </body>
 
 </html>
