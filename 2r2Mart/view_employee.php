@@ -63,13 +63,16 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                       <th>Email</th>
                       <th>Phone No</th>
                       <th>Supervisor</th>
-                      <?php if ($manager) { ?>
+                      <?php if ($manager) {
+    ?>
                         <th>Address</th>
                         <th>Salary</th>
                         <th>Hire Date</th>
                         <th>Job Position</th>
+                        <th>Allowance</th>
                         <th>Action</th>
-                      <?php } ?>
+                      <?php
+} ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -77,7 +80,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     require 'Connection.php';
                     $con = new Connection();
                     $emp = $con->query("
-                    Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_title,
+                    Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_title,f.allowance,
                     (case 
                     when supervisor_id is null then 'No Supervisor' 
                     else (select name from employee where emp_id = e.supervisor_id) 
@@ -85,20 +88,20 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     FROM employee e join full_time f on e.emp_id = f.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
                     order by e.emp_id asc", [$logged_in]);
                     if ($emp != null) {
-                      for ($i = 0; $i < count($emp); ++$i) {
-                        $hiddenid = $i + 1; // for security purposes 
-                    ?>
+                        for ($i = 0; $i < count($emp); ++$i) {
+                            $hiddenid = $i + 1; // for security purposes?>
                         <tr class="gradeX">
                           <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME']; ?></td>
                           <td><?php echo $emp[$i]['EMAIL']; ?></td>
                           <td><?php echo $emp[$i]['PHONENO']; ?></td>
                           <td><?php echo $emp[$i]['SUPERVISOR']; ?></td>
                           <?php if ($manager) {
-                          ?>
+                                ?>
                             <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS']; ?></td>
                             <td><?php echo $emp[$i]['SALARY']; ?></td>
                             <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
                             <td><?php echo $emp[$i]['JOB_TITLE']; ?></td>
+                            <td><?php echo $emp[$i]['ALLOWANCE']; ?></td>
                             <td>
                               <p>
                                 <center>
@@ -113,10 +116,10 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                               </p>
                             </td>
                           <?php
-                          } ?>
+                            } ?>
                         </tr>
                     <?php
-                      }
+                        }
                     } ?>
                   </tbody>
                 </table>
@@ -144,19 +147,22 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                       <th>Email</th>
                       <th>Phone No</th>
                       <th>Supervisor</th>
-                      <?php if ($manager) { ?>
+                      <?php if ($manager) {
+                        ?>
                         <th>Address</th>
                         <th>Salary</th>
                         <th>Hire Date</th>
                         <th>Job Position</th>
+                        <th>Hourly Rate
                         <th>Action</th>
-                      <?php } ?>
+                      <?php
+                    } ?>
                     </tr>
                   </thead>
                   <tbody>
                     <?php
                     $emp = $con->query("
-                    Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_title,
+                    Select e.name,e.email,e.phoneno,e.address,e.salary,e.hire_date,j.job_title,p.hourly_rate,
                     (case 
                     when supervisor_id is null then 'No Supervisor' 
                     else (select name from employee where emp_id = e.supervisor_id) 
@@ -164,20 +170,20 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     FROM employee e join part_time p on e.emp_id = p.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
                     order by e.emp_id asc", [$logged_in]);
                     if ($emp != null) {
-                      for ($i = 0; $i < count($emp); ++$i) {
-                        $hiddenid = $i + 1; // for security purposes 
-                    ?>
+                        for ($i = 0; $i < count($emp); ++$i) {
+                            $hiddenid = $i + 1; // for security purposes?>
                         <tr class="gradeX">
                           <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME']; ?></td>
                           <td><?php echo $emp[$i]['EMAIL']; ?></td>
                           <td><?php echo $emp[$i]['PHONENO']; ?></td>
                           <td><?php echo $emp[$i]['SUPERVISOR']; ?></td>
                           <?php if ($manager) {
-                          ?>
+                                ?>
                             <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS']; ?></td>
                             <td><?php echo $emp[$i]['SALARY']; ?></td>
                             <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
                             <td><?php echo $emp[$i]['JOB_TITLE']; ?></td>
+                            <td><?php echo $emp[$i]['HOURLY_RATE']; ?></td>
                             <td>
                               <p>
                                 <center>
@@ -192,10 +198,10 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                               </p>
                             </td>
                           <?php
-                          } ?>
+                            } ?>
                         </tr>
                     <?php
-                      }
+                        }
                     } ?>
                   </tbody>
                 </table>
