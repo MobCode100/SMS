@@ -13,7 +13,7 @@ preload('all');
 
 <head>
   <title>2r2 Mart</title>
-  <link rel="icon" href="img/logo2.png"></title>
+  <link rel="icon" href="img/logo2.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/bootstrap.min.css" />
@@ -51,7 +51,7 @@ preload('all');
           </tr>
           <tr>
           <th>
-          <marquee> THIS WEBSITE IS MADE TO EASE THE PROCESS OF PRODUCTS' STOCK IN BY 2R2 MART </marquee>
+          <marquee> THIS SYSTEM IS MADE TO EASE THE PROCESS OF RECORDING INVENTORY BY 2R2 MART </marquee>
           </th>
           </tr>
           </table>

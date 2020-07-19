@@ -16,7 +16,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
 
 <head>
   <title>2r2 Mart</title>
-  <link rel="icon" href="img/logo2.png"></title>
+  <link rel="icon" href="img/logo2.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/bootstrap.min.css" />
