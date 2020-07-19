@@ -1,3 +1,2 @@
 # SMS
- A simple project for ICT502 subject.
- This branch is for making changes. :)
+ A trash project used as an experiment to GitHub.
