@@ -18,7 +18,6 @@ if (isset($_POST['submit'])) {
     $email = $_POST['email'];
     $address = $_POST['address'];
     $phoneno = $_POST['phoneNO'];
-    $pass = $_POST['password'];
     $salary = $_POST['salary'];
     $hiredate = $_POST['hiredate'];
     $jobposition = json_decode($_POST['jobPosition']);
@@ -32,7 +31,6 @@ if (isset($_POST['submit'])) {
 
     $validemail = validateEmail($email);
     $validphoneno = validatePhoneNo($phoneno);
-    $validpass = checkPassword($pass);
     $salaryform = formatsalary($salary);
     $allowanceform = formatsalary($allowance);
     $hourlyform = formatsalary($hourlyrate);
@@ -82,8 +80,7 @@ if (isset($_POST['submit'])) {
                 }
             }
 
-            if ($validpass == true) {
-                $pastTime1 = $con->query('select * from full_time where emp_id = ?', [$empid]); //fulltime
+            $pastTime1 = $con->query('select * from full_time where emp_id = ?', [$empid]); //fulltime
                 $pastTime2 = $con->query('select * from part_time where emp_id = ?', [$empid]); //parttime
                 if ($pastTime1 != null && $emptype == 'partTime') {
                     $con->query('delete from FULL_TIME WHERE EMP_ID=?', [$empid]);
@@ -92,36 +89,33 @@ if (isset($_POST['submit'])) {
                     $con->query('delete from PART_TIME WHERE EMP_ID=?', [$empid]);
                     $con->query('INSERT INTO FULL_TIME(EMP_ID,ALLOWANCE)VALUES (?,?)', [$empid, $allowance]);
                 }
-                if ($salaryform == true) {
-                    if ($jobposition[1] == 'MANAGER' || $jobposition[1] == 'SUPERVISOR') {
+            if ($salaryform == true) {
+                if ($jobposition[1] == 'MANAGER' || $jobposition[1] == 'SUPERVISOR') {
+                    $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $salary, $hiredate, $jobposition[0], $empid]);
+                    $con->query('UPDATE FULL_TIME SET ALLOWANCE=? WHERE EMP_ID=?', [$allowance, $empid]);
+                    echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
+                } else {
+                    if ($emptype == 'fullTime' && $allowanceform == true) {
                         $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $salary, $hiredate, $jobposition[0], $empid]);
                         $con->query('UPDATE FULL_TIME SET ALLOWANCE=? WHERE EMP_ID=?', [$allowance, $empid]);
                         echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
                     } else {
-                        if ($emptype == 'fullTime' && $allowanceform == true) {
-                            $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $salary, $hiredate, $jobposition[0], $empid]);
-                            $con->query('UPDATE FULL_TIME SET ALLOWANCE=? WHERE EMP_ID=?', [$allowance, $empid]);
-                            echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
-                        } else {
-                            if ($emptype == 'fullTime' && ($allowanceform == null || $allowanceform == '')) {
-                                echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Allowance Input');</script>";
-                            }
-                        }
-                        if ($emptype == 'partTime' && $hourlyform == true) {
-                            $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $salary, $hiredate, $jobposition[0], $empid]);
-                            $con->query('UPDATE PART_TIME SET HOURLY_RATE=? WHERE EMP_ID=?', [$hourlyrate, $empid]);
-                            echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
-                        } else {
-                            if ($emptype == 'partTime' && ($hourlyform == null || $hourlyform == '')) {
-                                echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Hourly Rate Input');</script>";
-                            }
+                        if ($emptype == 'fullTime' && ($allowanceform == null || $allowanceform == '')) {
+                            echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Allowance Input');</script>";
                         }
                     }
-                } else {
-                    echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Salary Input');</script>";
+                    if ($emptype == 'partTime' && $hourlyform == true) {
+                        $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $salary, $hiredate, $jobposition[0], $empid]);
+                        $con->query('UPDATE PART_TIME SET HOURLY_RATE=? WHERE EMP_ID=?', [$hourlyrate, $empid]);
+                        echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
+                    } else {
+                        if ($emptype == 'partTime' && ($hourlyform == null || $hourlyform == '')) {
+                            echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Hourly Rate Input');</script>";
+                        }
+                    }
                 }
             } else {
-                echo "<script language='javascript'>window.location='view_employee.php';alert('$validpass');</script>";
+                echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Salary Input');</script>";
             }
         } else {
             echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Phone Number');</script>";
