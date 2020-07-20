@@ -5,10 +5,10 @@ if (isset($_POST['submit'])) {
     include 'functions.php';
     require 'connection.php';
 
-    function formatsalary($salarychange)
+    function formatsalary($validformat, $salary)
     {
-        if (preg_match('/^\d|\d,\d+(\.(\d{2}))?$/', $salarychange)) {
-            return true;
+        if ($validformat) {
+            return number_format($salary, 2, '.', '');
         }
     }
 
@@ -31,9 +31,13 @@ if (isset($_POST['submit'])) {
 
     $validemail = validateEmail($email);
     $validphoneno = validatePhoneNo($phoneno);
-    $salaryform = formatsalary($salary);
-    $allowanceform = formatsalary($allowance);
-    $hourlyform = formatsalary($hourlyrate);
+    $salaryform = is_numeric($salary);
+    $allowanceform = is_numeric($allowance);
+    $hourlyform = is_numeric($hourlyrate);
+
+    $salary = formatsalary($salaryform, $salary);
+    $allowance = formatsalary($allowanceform, $allowance);
+    $hourlyrate = formatsalary($hourlyform, $hourlyrate);
 
     $supervisorid = $con->query('SELECT SUPERVISOR_ID FROM EMPLOYEE WHERE EMP_ID=?', [$empid])[0][0];
     $currentemail = $con->query('SELECT EMAIL FROM EMPLOYEE WHERE EMP_ID=?', [$empid])[0][0];
