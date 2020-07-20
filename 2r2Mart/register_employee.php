@@ -161,26 +161,28 @@ if ($job !== '[null,""]') {
                     <input type="text" class="span5" name="phoneNO" value="<?php echo $phoneno; ?>" required />
                   </div>
                 </div>
-                <?php if (!$edit) { ?>
+                <?php if (!$edit) {
+    ?>
                   <div class="control-group">
                     <label class="control-label">Password :</label>
                     <div class="controls ">
                       <input type="password" class="span5" name="password" required />
                     </div>
                   </div>
-                <?php } ?>
+                <?php
+} ?>
 
                 <div class="control-group">
                   <label class="control-label">Salary :</label>
                   <div class="controls ">
-                    <input type="text" class="span5" name="salary" value="<?php echo $salary; ?>" required />
+                    <input type="text" class="span5 money" name="salary" value="<?php echo $salary; ?>" required />
                   </div>
                 </div>
                 <?php if ($edit) {
-    ?>
+        ?>
                   <input type="hidden" name="empid" value="<?php echo $emp_id; ?>" />
                 <?php
-}  ?>
+    }  ?>
                 <div class="control-group">
                   <label class="control-label">Hire Date :</label>
                   <div class="controls">
@@ -221,14 +223,14 @@ if ($job !== '[null,""]') {
                 <div class="control-group" id="Allowance" style="display: none">
                   <label class="control-label">Allowance :</label>
                   <div class="controls">
-                    <input type="text" name="allowance" value="<?php echo $allowance; ?>" class="span5" placeholder="Allowance" />
+                    <input type="text" name="allowance" value="<?php echo $allowance; ?>" class="span5 money" placeholder="Allowance" />
                   </div>
                 </div>
 
                 <div class="control-group" id="hourlySalary" style="display: none">
                   <label class="control-label">Hourly Rate :</label>
                   <div class="controls">
-                    <input type="text" name="hourlyrate" class="span5" value="<?php echo $hourly_rate; ?>" placeholder="Hourly Rate" />
+                    <input type="text" name="hourlyrate" class="span5 money" value="<?php echo $hourly_rate; ?>" placeholder="Hourly Rate" />
                   </div>
                 </div>
 
@@ -306,6 +308,40 @@ if ($job !== '[null,""]') {
       $("#jobPosition").val('<?php echo $job; ?>');
       $("#jobPosition").trigger("change");
     });
+    
+      $('.money').bind('input propertychange', function () {
+        var value = $(this).val().toString()
+        var splitted = value.split('.');
+        var count = 0;
+        var countDec = 0;
+        var max = 8;
+        var len = splitted[1] ? splitted[1].length : 0;
+        for(var i = 0; i < len; i++){
+          var char = splitted[1].substring(i,i+1).trim();
+          if(char.length > 0){
+            if(!isNaN(char)){
+             countDec++;
+            }
+          }
+        }
+        if(countDec > 2){
+          max = 7; 
+        }
+        for(var i = 0; i < splitted[0].length; i++){
+          var char = splitted[0].substring(i,i+1).trim();
+          if(char.length > 0){
+            if(!isNaN(char)){
+             count++;
+            }
+          }
+        }
+        if(count > max){
+          var currentpos = $('.money:focus')[0].selectionStart;
+          var newpos = currentpos - 1;
+          $(this).val(value.substring(0,newpos) + value.substring(currentpos));
+          $('.money:focus')[0].setSelectionRange(newpos,newpos);
+        }
+      });
   </script>
 </body>
 

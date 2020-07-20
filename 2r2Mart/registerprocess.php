@@ -5,10 +5,10 @@ if (isset($_POST['submit'])) {
     include 'functions.php';
     require 'connection.php';
 
-    function formatsalary($salarychange)
+    function formatsalary($validformat, $salary)
     {
-        if (preg_match('/^\d|\d,\d+(\.(\d{2}))?$/', $salarychange)) {
-            return true;
+        if ($validformat) {
+            return number_format($salary, 2, '.', '');
         }
     }
 
@@ -32,9 +32,13 @@ if (isset($_POST['submit'])) {
     $validemail = validateEmail($email);
     $validphoneno = validatePhoneNo($phoneno);
     $validpass = checkPassword($pass);
-    $salaryform = formatsalary($salary);
-    $allowanceform = formatsalary($allowance);
-    $hourlyform = formatsalary($hourlyrate);
+    $salaryform = is_numeric($salary);
+    $allowanceform = is_numeric($allowance);
+    $hourlyform = is_numeric($hourlyrate);
+
+    $salary = formatsalary($salaryform, $salary);
+    $allowance = formatsalary($allowanceform, $allowance);
+    $hourlyrate = formatsalary($hourlyform, $hourlyrate);
 
     if ($jobposition[1] == '' || $jobposition[1] == null) {
         echo "<script language='javascript'>window.location='register_employee.php';alert('Please Insert Your Job Position ');</script>";
