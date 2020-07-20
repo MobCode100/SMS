@@ -48,20 +48,32 @@ if (isset($_SESSION['EMP_ID'])) {
             </div>
         </form>
     </div>
-    
+
     <script src="js/jquery.min.js"></script>
     <script src="js/matrix.login.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <?php if (isset($_GET['message'])) { ?>
-        <div id="myModal" class="modal hide">
-            <div class="modal-header" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px">
-                <button class="close" data-dismiss="modal">×</button>
-                <strong>Error!</strong> <?php echo $_GET['message'] ?>
+    <?php if (isset($_GET['message'])) {
+        if ($_GET['t'] == 1) {
+            $id = "myModalError";
+    ?>
+            <div id="myModalError" class="modal hide">
+                <div class="modal-header" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
+                    <button class="close" data-dismiss="modal">×</button>
+                    <strong>Error!</strong> &nbsp;<?php echo $_GET['message'] ?>
+                </div>
             </div>
-        </div>
-
+        <?php } else {
+            $id = "myModalSuccess";
+        ?>
+            <div id="myModalSuccess" class="modal hide">
+                <div class="modal-header" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
+                    <button class="close" data-dismiss="modal">×</button>
+                    <strong>Success!</strong> &nbsp;<?php echo $_GET['message'] ?>
+                </div>
+            </div>
+        <?php } ?>
         <script>
-            $('#myModal').modal('show');
+            $('#<?php echo $id; ?>').modal('show');
             if (typeof window.history.pushState == 'function') {
                 window.history.pushState({}, "Hide", "index.php");
             }

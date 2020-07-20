@@ -65,7 +65,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                       <th>Phone No</th>
                       <th>Supervisor</th>
                       <?php if ($manager) {
-    ?>
+                      ?>
                         <th>Address</th>
                         <th>Salary</th>
                         <th>Hire Date</th>
@@ -73,7 +73,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                         <th>Allowance</th>
                         <th>Action</th>
                       <?php
-} ?>
+                      } ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -89,15 +89,16 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     FROM employee e join full_time f on e.emp_id = f.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
                     order by e.emp_id asc", [$logged_in]);
                     if ($emp != null) {
-                        for ($i = 0; $i < count($emp); ++$i) {
-                            $hiddenid = $i + 1; // for security purposes?>
+                      for ($i = 0; $i < count($emp); ++$i) {
+                        $hiddenid = $i + 1; // for security purposes
+                    ?>
                         <tr class="gradeX">
                           <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME']; ?></td>
                           <td><?php echo $emp[$i]['EMAIL']; ?></td>
                           <td><?php echo $emp[$i]['PHONENO']; ?></td>
                           <td><?php echo $emp[$i]['SUPERVISOR']; ?></td>
                           <?php if ($manager) {
-                                ?>
+                          ?>
                             <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS']; ?></td>
                             <td><?php echo $emp[$i]['SALARY']; ?></td>
                             <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
@@ -110,17 +111,18 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                                     <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
                                     <button class="btn btn-warning" name="fulltime">Edit</button>
                                   </form>
-                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME']; ?>')">
+                                  <form class="tableform" id="<?php echo "f".$i ?>" action="delete_employee.php" method="post">
                                     <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
-                                    <button class="btn btn-danger" name="fulltime">Delete</button>
+                                    <input type="hidden" name="fulltime" />
                                   </form>
+                                  <button class="btn btn-danger" onclick="confirm('f<?php echo $i ?>','<?php echo $emp[$i]['NAME'] ?>')">Delete</button>
                               </p>
                             </td>
                           <?php
-                            } ?>
+                          } ?>
                         </tr>
                     <?php
-                        }
+                      }
                     } ?>
                   </tbody>
                 </table>
@@ -149,7 +151,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                       <th>Phone No</th>
                       <th>Supervisor</th>
                       <?php if ($manager) {
-                        ?>
+                      ?>
                         <th>Address</th>
                         <th>Salary</th>
                         <th>Hire Date</th>
@@ -157,7 +159,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                         <th>Hourly Rate
                         <th>Action</th>
                       <?php
-                    } ?>
+                      } ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -171,15 +173,16 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     FROM employee e join part_time p on e.emp_id = p.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
                     order by e.emp_id asc", [$logged_in]);
                     if ($emp != null) {
-                        for ($i = 0; $i < count($emp); ++$i) {
-                            $hiddenid = $i + 1; // for security purposes?>
+                      for ($i = 0; $i < count($emp); ++$i) {
+                        $hiddenid = $i + 1; // for security purposes
+                    ?>
                         <tr class="gradeX">
                           <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME']; ?></td>
                           <td><?php echo $emp[$i]['EMAIL']; ?></td>
                           <td><?php echo $emp[$i]['PHONENO']; ?></td>
                           <td><?php echo $emp[$i]['SUPERVISOR']; ?></td>
                           <?php if ($manager) {
-                                ?>
+                          ?>
                             <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS']; ?></td>
                             <td><?php echo $emp[$i]['SALARY']; ?></td>
                             <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
@@ -192,17 +195,18 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                                     <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
                                     <button class="btn btn-warning" name="parttime">Edit</button>
                                   </form>
-                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME']; ?>')">
+                                  <form class="tableform" id="<?php echo "p".$i ?>" action="delete_employee.php" method="post">
                                     <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
-                                    <button class="btn btn-danger" name="parttime">Delete</button>
+                                    <input type="hidden" name="parttime" />
                                   </form>
+                                  <button class="btn btn-danger" onclick="confirm('p<?php echo $i ?>','<?php echo $emp[$i]['NAME'] ?>')">Delete</button>
                               </p>
                             </td>
                           <?php
-                            } ?>
+                          } ?>
                         </tr>
                     <?php
-                        }
+                      }
                     } ?>
                   </tbody>
                 </table>
@@ -212,6 +216,16 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
         </div>
       </div>
     </div>
+  </div>
+  <div id="myAlert" class="modal hide" style="font-size:15px">
+    <div class="modal-header" style="border-radius:6px 6px 0 0;">
+      <button data-dismiss="modal" class="close" type="button">×</button>
+      <h3 style="font-size:15px">Delete confirmation</h3>
+    </div>
+    <div class="modal-body" >
+      <p id="deletedialog"></p>
+    </div>
+    <div class="modal-footer"> <a data-dismiss="modal" id="confirmButton" class="btn btn-primary">Confirm</a> <a data-dismiss="modal" class="btn">Cancel</a> </div>
   </div>
 
   <script src="js/jquery.min.js"></script>
@@ -242,10 +256,15 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
       });
     });
 
-    function deleteConfirmation($name) {
-      return confirm("Do you want to remove " + $name + " ?");
+    function confirm(id, name) {
+      $('#deletedialog').html('Are you sure you want to delete ' + name + "?");
+      $("#confirmButton").click(function() {
+        $("#"+id).trigger("submit");
+      });
+      $('#myAlert').modal('show');
     }
   </script>
+
 </body>
 
 </html>
