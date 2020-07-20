@@ -28,6 +28,7 @@ preload('all');
   <link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <link href="modalStyle.css" rel="stylesheet">
 </head>
 
 <body>
@@ -96,12 +97,18 @@ preload('all');
         </div>
       </div>
     </div>
-    <div id="myModalError" class="modal hide">
-      <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
-        <button class="close" data-dismiss="modal">×</button>
-        <strong>Error!</strong> &nbsp;
-      </div>
+    <div id="myModalError" class="modal hide fade fade">
+    <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
+      <button class="close" data-dismiss="modal">×</button>
+      <strong>Error!</strong> &nbsp;
     </div>
+  </div>
+  <div id="myModalSuccess" class="modal hide fade">
+    <div class="modal-header" id="success_text" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
+      <button class="close" data-dismiss="modal">×</button>
+      <strong>Success!</strong> &nbsp;
+    </div>
+  </div>
 
   </div>
   <!--Footer-part-->
@@ -119,6 +126,19 @@ preload('all');
   <script src="js/jquery.peity.min.js"></script>
   <script src="js/bootstrap-wysihtml5.js"></script>
   <script>
+    <?php
+    if (isset($_SESSION['t'])) {
+      if ($_SESSION['t'] == 1) {
+        echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+        echo "$('#myModalError').modal('show');";
+      } else {
+        echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+        echo "$('#myModalSuccess').modal('show');";
+      }
+      clearMessage();
+    }
+    ?>
+
     function validate() {
       var nP = $('input[name ="newPassword"]').val();
       var cP = $('input[name ="confirmPassword"]').val()

@@ -70,6 +70,7 @@ else {
   <link rel="stylesheet" href="css/matrix-style.css" />
   <link rel="stylesheet" href="css/matrix-media.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href="modalStyle.css" rel="stylesheet">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 </head>
 
@@ -81,15 +82,15 @@ else {
   <?php include("sidebar.php"); ?>
   <div id="content">
     <div id="content-header">
-      <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Current Employee</a> </div>
-      <h1>Current Employee</h1>
+      <div id="breadcrumb"> <a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Assign Supervisor</a> </div>
+      <h1>Assign Supervisor</h1>
     </div>
     <div class="container-fluid">
       <hr>
       <div class="row-fluid">
         <div class="span12">
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-user"></i></span>
+            <div class="widget-title"> <span class="icon"><i class="icon-group"></i></span>
               <h5>Current Employee</h5>
             </div>
             <div class="widget-content nopadding">
@@ -181,6 +182,20 @@ else {
   <script src="js/jquery.dataTables.min.js"></script>
   <script src="js/matrix.js"></script>
   <script src="js/matrix.tables.js"></script>
+  <script>
+    <?php
+    if (isset($_SESSION['t'])) {
+      if ($_SESSION['t'] == 1) {
+        echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+        echo "$('#myModalError').modal('show');";
+      } else {
+        echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+        echo "$('#myModalSuccess').modal('show');";
+      }
+      clearMessage();
+    }
+    ?>
+  </script>
 </body>
 
 </html>

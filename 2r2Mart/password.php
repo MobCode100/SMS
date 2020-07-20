@@ -17,14 +17,22 @@ if (isset($_POST["submit"])) {
         if ($validPassword === true) {
             if ($newPassword === $confirmPassword) {
                 $con->query("UPDATE EMPLOYEE SET PASSWORD = ? where EMP_ID = ?", [$newPassword, $_SESSION['EMP_ID']]);
-                echo "<script language='javascript'>window.location='change_password.php';alert('Password updated');</script>";
+                $_SESSION['t'] = 0;
+                $_SESSION['message'] = 'Password updated';
+                echo "<script language='javascript'>window.location='change_password.php';</script>";
             } else {
-                echo "<script language='javascript'>window.location='change_password.php';alert('New passwords do not match!');</script>";
+                $_SESSION['t'] = 1;
+                $_SESSION['message'] = 'New password do not match!';
+                echo "<script language='javascript'>window.location='change_password.php';</script>";
             }
         } else {
-            echo "<script language='javascript'>window.location='change_password.php';alert('". $validPassword . "');</script>";
+            $_SESSION['t'] = 1;
+            $_SESSION['message'] = $validPassword;
+            echo "<script language='javascript'>window.location='change_password.php';</script>";
         }
     } else {
-        echo "<script language='javascript'>window.location='change_password.php';alert('Wrong current password!');</script>";
+        $_SESSION['t'] = 1;
+        $_SESSION['message'] = 'Wrong current password!';
+        echo "<script language='javascript'>window.location='change_password.php';</script>";
     }
 }

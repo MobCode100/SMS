@@ -15,5 +15,7 @@ if (isset($_POST['sBut'])) {
     $con->query("insert into transaction (emp_id,product_id,quantity,date_time) values(?,?,?,sysdate)",
     [$_SESSION['EMP_ID'],$_POST['product'],$_POST['quantity']]);
     $con->query("UPDATE PRODUCT set quantity = quantity + ? where product_id = ?",[$_POST['quantity'],$_POST['product']]);
-    echo "<script language='javascript'>window.location='add_transaction.php';alert('Transaction entered successfully!');</script>";
+    $_SESSION['t'] = 0;
+    $_SESSION['message'] = 'Transaction entered successfully!';
+    echo "<script language='javascript'>window.location='add_transaction.php';</script>";
 }

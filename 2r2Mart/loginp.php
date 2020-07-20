@@ -5,9 +5,8 @@ if (isset($_POST['login'])) {
   $email = trim($_POST['u_email']);
   $pass = $_POST['u_pass'];
   $result = $con->query("SELECT * FROM EMPLOYEE WHERE EMAIL = ? AND PASSWORD = ? ", [$email, $pass]);
-
+  session_start();
   if ($result != null) {
-    session_start();
     $_SESSION['JOB_ID'] = $result[0]['JOB_ID'];
     $_SESSION['EMP_ID'] = $result[0]['EMP_ID'];
     $_SESSION['NAME'] = $result[0]['NAME'];
@@ -15,7 +14,9 @@ if (isset($_POST['login'])) {
     echo "<script Language = 'javascript'>
                window.location='dashboard.php';</script>";
   } else {
+    $_SESSION['t'] = 1;
+    $_SESSION['message'] = 'Incorrect password or email';
     echo "<script Language = 'javascript'>
-           window.location='index.php?t=1&message=Incorrect password or email';</script>";
+           window.location='index.php';</script>";
   }
 }
