@@ -1,5 +1,5 @@
 CREATE USER sms_2r2mart IDENTIFIED BY "system"  ;
-GRANT "DBA" TO sms_2r2mart ;
+GRANT "DBA" TO sms_2r2mart ; 
 --------------------------------------------------------
 --  File created - Saturday-July-18-2020   
 --------------------------------------------------------
