@@ -102,10 +102,10 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                           <?php if ($manager) {
                           ?>
                             <td style="white-space:normal;min-width:260px"><?php echo $emp[$i]['ADDRESS']; ?></td>
-                            <td><?php echo number_format($emp[$i]['SALARY'],2,'.',''); ?></td>
+                            <td><?php echo number_format($emp[$i]['SALARY'], 2, '.', ''); ?></td>
                             <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
                             <td><?php echo $emp[$i]['JOB_TITLE']; ?></td>
-                            <td><?php echo number_format($emp[$i]['ALLOWANCE'],2,'.','');?></td>
+                            <td><?php echo number_format($emp[$i]['ALLOWANCE'], 2, '.', ''); ?></td>
                             <td>
                               <p>
                                 <center>
@@ -186,10 +186,10 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                           <?php if ($manager) {
                           ?>
                             <td style="white-space:normal;min-width:260px"><?php echo $emp[$i]['ADDRESS']; ?></td>
-                            <td><?php echo number_format($emp[$i]['SALARY'],2,'.',''); ?></td>
+                            <td><?php echo number_format($emp[$i]['SALARY'], 2, '.', ''); ?></td>
                             <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
                             <td><?php echo $emp[$i]['JOB_TITLE']; ?></td>
-                            <td><?php echo number_format($emp[$i]['HOURLY_RATE'],2,'.',''); ?></td>
+                            <td><?php echo number_format($emp[$i]['HOURLY_RATE'], 2, '.', ''); ?></td>
                             <td>
                               <p>
                                 <center>
@@ -252,18 +252,20 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
   <script src="js/matrix.js"></script>
   <script src="js/matrix.tables.js"></script>
   <script>
-    <?php
-    if (isset($_SESSION['t'])) {
-      if ($_SESSION['t'] == 1) {
-        echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalError').modal('show');";
-      } else {
-        echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalSuccess').modal('show');";
+    $(document).ready(function() {
+      <?php
+      if (isset($_SESSION['t'])) {
+        if ($_SESSION['t'] == 1) {
+          echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalError').modal('show');";
+        } else {
+          echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalSuccess').modal('show');";
+        }
+        clearMessage();
       }
-      clearMessage();
-    }
-    ?>
+      ?>
+    });
     $(document).ready(function() {
       var Width = $('#tablecb').width();
       $("#tablecb_paginate").parent().css({

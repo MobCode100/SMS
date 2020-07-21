@@ -44,12 +44,16 @@ if (isset($_POST['submit'])) {
     $currentphoneno = (int) validatePhoneNo($con->query('SELECT PHONENO FROM EMPLOYEE WHERE EMP_ID=?', [$empid])[0][0]);
 
     if ($jobposition[1] == '' || $jobposition[1] == null) {
-        echo "<script language='javascript'>window.location='view_employee.php';alert('Please Insert Your Job Position ');</script>";
+        $_SESSION['t'] = 1;
+        $_SESSION['message'] = 'Please Insert Your Job Position';
+        echo "<script language='javascript'>window.location='view_employee.php';</script>";
         exit;
     }
     if ($jobposition[1] != 'MANAGER' || $jobposition[1] != 'SUPERVISOR') {
         if ($emptype == null) {
-            echo "<script language='javascript'>window.location='view_employee.php';alert('Please Insert Your Employee Type ');</script>";
+            $_SESSION['t'] = 1;
+            $_SESSION['message'] = 'Please Insert Your Employee Type';
+            echo "<script language='javascript'>window.location='view_employee.php';</script>";
             exit;
         }
     }
@@ -69,7 +73,9 @@ if (isset($_POST['submit'])) {
                     $compareemail[$c][0];
                     if ($email == $compareemail[$c][0] && $compareemailvalid == true) {
                         if ($compareemail[$c][0] != $currentemail) {
-                            echo "<script language='Javascript'>window.location = 'view_employee.php';alert('The Email Already Exist');</script>";
+                            $_SESSION['t'] = 1;
+                            $_SESSION['message'] = 'The Email Already Exist';
+                            echo "<script language='Javascript'>window.location = 'view_employee.php';</script>";
                             exit;
                         }
                     }
@@ -85,72 +91,96 @@ if (isset($_POST['submit'])) {
                         $convert2 = (int) $validphoneno;
                         if ($convert == $convert2) {
                             if ($convert != $currentphoneno) {
-                                echo "<script language='javascript'>window.location='view_employee.php';alert('The Phone Number Already Exist');</script>";
+                                $_SESSION['t'] = 1;
+                                $_SESSION['message'] = 'The Phone Number Already Exist';
+                                echo "<script language='javascript'>window.location='view_employee.php';</script>";
                                 exit;
                             }
                         }
                     }
 
                     $pastTime1 = $con->query('select * from full_time where emp_id = ?', [$empid]); //fulltime
-                $pastTime2 = $con->query('select * from part_time where emp_id = ?', [$empid]); //parttime
-                if ($pastTime1 != null && $emptype == 'partTime') {
-                    $con->query('delete from FULL_TIME WHERE EMP_ID=?', [$empid]);
-                    $con->query('INSERT INTO PART_TIME(EMP_ID,HOURLY_RATE)VALUES (?,?)', [$empid, $hourlyrate]);
-                } elseif ($pastTime2 != null && $emptype == 'fullTime') {
-                    $con->query('delete from PART_TIME WHERE EMP_ID=?', [$empid]);
-                    $con->query('INSERT INTO FULL_TIME(EMP_ID,ALLOWANCE)VALUES (?,?)', [$empid, $allowance]);
-                }
+                    $pastTime2 = $con->query('select * from part_time where emp_id = ?', [$empid]); //parttime
+                    if ($pastTime1 != null && $emptype == 'partTime') {
+                        $con->query('delete from FULL_TIME WHERE EMP_ID=?', [$empid]);
+                        $con->query('INSERT INTO PART_TIME(EMP_ID,HOURLY_RATE)VALUES (?,?)', [$empid, $hourlyrate]);
+                    } elseif ($pastTime2 != null && $emptype == 'fullTime') {
+                        $con->query('delete from PART_TIME WHERE EMP_ID=?', [$empid]);
+                        $con->query('INSERT INTO FULL_TIME(EMP_ID,ALLOWANCE)VALUES (?,?)', [$empid, $allowance]);
+                    }
                     if ($salaryform == true) {
                         if ($jobposition[1] == 'MANAGER' || $jobposition[1] == 'SUPERVISOR') {
                             $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $salary, $hiredate, $jobposition[0], $empid]);
                             $con->query('UPDATE FULL_TIME SET ALLOWANCE=? WHERE EMP_ID=?', [$allowance, $empid]);
-                            echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
+                            $_SESSION['t'] = 0;
+                            $_SESSION['message'] = 'Successfully Updated';
+                            echo "<script language='javascript'>window.location='view_employee.php';</script>";
                             exit;
                         } else {
                             if ($emptype == 'fullTime' && $allowanceform == true) {
                                 $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $salary, $hiredate, $jobposition[0], $empid]);
                                 $con->query('UPDATE FULL_TIME SET ALLOWANCE=? WHERE EMP_ID=?', [$allowance, $empid]);
-                                echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
+                                $_SESSION['t'] = 0;
+                                $_SESSION['message'] = 'Successfully Updated';
+                                echo "<script language='javascript'>window.location='view_employee.php';</script>";
                                 exit;
                             } else {
                                 if ($emptype == 'fullTime' && ($allowanceform == null || $allowanceform == '')) {
-                                    echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Allowance Input');</script>";
+                                    $_SESSION['t'] = 1;
+                                    $_SESSION['message'] = 'Incorrect Allowance Input';
+                                    echo "<script language='javascript'>window.location='view_employee.php';</script>";
                                     exit;
                                 }
                             }
                             if ($emptype == 'partTime' && $hourlyform == true) {
                                 $con->query("UPDATE EMPLOYEE SET NAME=?,EMAIL=?,ADDRESS=?,PHONENO=?,SALARY=?,HIRE_DATE=to_date(?,'fxYYYY-MM-DD'),JOB_ID=? WHERE EMP_ID=?", [$name, $email, $address, $phoneno, $salary, $hiredate, $jobposition[0], $empid]);
                                 $con->query('UPDATE PART_TIME SET HOURLY_RATE=? WHERE EMP_ID=?', [$hourlyrate, $empid]);
-                                echo "<script language='javascript'>window.location='view_employee.php';alert('Successfully Updated');</script>";
+                                $_SESSION['t'] = 0;
+                                $_SESSION['message'] = 'Successfully Updated';
+                                echo "<script language='javascript'>window.location='view_employee.php';</script>";
                                 exit;
                             } else {
                                 if ($emptype == 'partTime' && ($hourlyform == null || $hourlyform == '')) {
-                                    echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Hourly Rate Input');</script>";
+                                    $_SESSION['t'] = 1;
+                                    $_SESSION['message'] = 'Incorrect Hourly Rate Input';
+                                    echo "<script language='javascript'>window.location='view_employee.php';</script>";
                                     exit;
                                 }
                             }
                         }
                     } else {
-                        echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Salary Input');</script>";
+                        $_SESSION['t'] = 1;
+                        $_SESSION['message'] = 'Incorrect Salary Input';
+                        echo "<script language='javascript'>window.location='view_employee.php';</script>";
                         exit;
                     }
                 } else {
-                    echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Phone Number');</script>";
+                    $_SESSION['t'] = 1;
+                    $_SESSION['message'] = 'Incorrect Phone Number';
+                    echo "<script language='javascript'>window.location='view_employee.php';</script>";
                     exit;
                 }
             } else {
-                echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Email format');</script>";
+                $_SESSION['t'] = 1;
+                $_SESSION['message'] = 'Incorrect Email format';
+                echo "<script language='javascript'>window.location='view_employee.php';</script>";
                 exit;
             }
         } else {
-            echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Name format');</script>";
+            $_SESSION['t'] = 1;
+            $_SESSION['message'] = 'Incorrect Name format';
+            echo "<script language='javascript'>window.location='view_employee.php';</script>";
             exit;
         }
     } else {
-        echo "<script language='javascript'>window.location='view_employee.php';alert('Incorrect Address format');</script>";
+        $_SESSION['t'] = 1;
+        $_SESSION['message'] = 'Incorrect Address format';
+        echo "<script language='javascript'>window.location='view_employee.php';</script>";
         exit;
     }
 } else {
-    echo "<script language='javascript'>window.location='index.php';alert('Ungranted User Detected');</script>";
+    $_SESSION['t'] = 1;
+    $_SESSION['message'] = 'Ungranted User Detected';
+    echo "<script language='javascript'>window.location='index.php';</script>";
     exit;
 }

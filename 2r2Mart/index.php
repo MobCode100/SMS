@@ -75,7 +75,9 @@ if (isset($_SESSION['EMP_ID'])) {
             </div>
         <?php } ?>
         <script>
-            $('#<?php echo $id; ?>').modal('show');
+            $(document).ready(function() {
+                $('#<?php echo $id; ?>').modal('show');
+            });
         </script>
     <?php clearMessage();
     } ?>

@@ -9,6 +9,7 @@ session_start();
 */
 preload('all');
 ?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -49,11 +50,11 @@ preload('all');
       <div class="row-fluid">
         <div class="span12">
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+            <div class="widget-title"> <span class="icon"><i class="icon-truck"></i></span>
               <h5>Transactions</h5>
             </div>
             <div class="widget-content nopadding">
-              <table class="table table-bordered data-table">
+              <table class="table table-bordered data-table" style="font-size:medium">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -137,18 +138,20 @@ preload('all');
   <script src="js/matrix.js"></script>
   <script src="js/matrix.tables.js"></script>
   <script>
-    <?php
-    if (isset($_SESSION['t'])) {
-      if ($_SESSION['t'] == 1) {
-        echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalError').modal('show');";
-      } else {
-        echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalSuccess').modal('show');";
+    $(document).ready(function() {
+      <?php
+      if (isset($_SESSION['t'])) {
+        if ($_SESSION['t'] == 1) {
+          echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalError').modal('show');";
+        } else {
+          echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalSuccess').modal('show');";
+        }
+        clearMessage();
       }
-      clearMessage();
-    }
-    ?>
+      ?>
+    });
 
     function confirm(id, name, quantity) {
       $('#deletedialog').html('Are you sure you want to delete this record? <br>No: ' + id + '<br>' + 'Name: ' + name + '<br>' + 'Quantity: ' + quantity);

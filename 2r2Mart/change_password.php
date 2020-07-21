@@ -60,7 +60,7 @@ preload('all');
           <h5>1. Does not match or significantly contain your name, e.g. 'maslan123'</h5>
           <div class="widget-box">
 
-            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <div class="widget-title"> <span class="icon"> <i class="icon-key"></i> </span>
               <h5>Password-info</h5>
             </div>
             <div class="widget-content nopadding">
@@ -98,17 +98,17 @@ preload('all');
       </div>
     </div>
     <div id="myModalError" class="modal hide fade fade">
-    <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
-      <button class="close" data-dismiss="modal">×</button>
-      <strong>Error!</strong> &nbsp;
+      <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
+        <button class="close" data-dismiss="modal">×</button>
+        <strong>Error!</strong> &nbsp;
+      </div>
     </div>
-  </div>
-  <div id="myModalSuccess" class="modal hide fade">
-    <div class="modal-header" id="success_text" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
-      <button class="close" data-dismiss="modal">×</button>
-      <strong>Success!</strong> &nbsp;
+    <div id="myModalSuccess" class="modal hide fade">
+      <div class="modal-header" id="success_text" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
+        <button class="close" data-dismiss="modal">×</button>
+        <strong>Success!</strong> &nbsp;
+      </div>
     </div>
-  </div>
 
   </div>
   <!--Footer-part-->
@@ -126,18 +126,20 @@ preload('all');
   <script src="js/jquery.peity.min.js"></script>
   <script src="js/bootstrap-wysihtml5.js"></script>
   <script>
-    <?php
-    if (isset($_SESSION['t'])) {
-      if ($_SESSION['t'] == 1) {
-        echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalError').modal('show');";
-      } else {
-        echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalSuccess').modal('show');";
+    $(document).ready(function() {
+      <?php
+      if (isset($_SESSION['t'])) {
+        if ($_SESSION['t'] == 1) {
+          echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalError').modal('show');";
+        } else {
+          echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalSuccess').modal('show');";
+        }
+        clearMessage();
       }
-      clearMessage();
-    }
-    ?>
+      ?>
+    });
 
     function validate() {
       var nP = $('input[name ="newPassword"]').val();

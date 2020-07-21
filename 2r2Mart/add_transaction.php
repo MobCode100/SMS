@@ -25,6 +25,7 @@ if (isset($_POST['edit'])) {
   }
 }
 ?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -126,19 +127,20 @@ if (isset($_POST['edit'])) {
   <script src="js/select2.min.js"></script>
   <script src="js/matrix.js"></script>
   <script>
-    <?php
-    if (isset($_SESSION['t'])) {
-      if ($_SESSION['t'] == 1) {
-        echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalError').modal('show');";
-      } else {
-        echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalSuccess').modal('show');";
+    $(document).ready(function() {
+      <?php
+      if (isset($_SESSION['t'])) {
+        if ($_SESSION['t'] == 1) {
+          echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalError').modal('show');";
+        } else {
+          echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalSuccess').modal('show');";
+        }
+        clearMessage();
       }
-      clearMessage();
-    }
-    ?>
-
+      ?>
+    });
     $(document).ready(function() {
       $("#select_p").val('<?php echo $product ?>');
     });

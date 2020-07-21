@@ -13,44 +13,43 @@ $logged_in = $_SESSION['EMP_ID']; // employee id yang login
 <?php
 require("Connection.php");
 $con = new Connection();
+$result = $con->query("SELECT * FROM EMPLOYEE WHERE EMP_ID != ? AND JOB_ID =? order by emp_id asc", [$logged_in, 2]);
+$super = $con->query("SELECT * FROM EMPLOYEE WHERE JOB_ID = ? order by emp_id asc", [3]);
 if (isset($_POST['Save'])) {
-  $changed = $_POST['supername'];
-  $result_explode = explode('|', $changed);
-  //echo "Sup: ". $result_explode[0]."<br />";
-  //echo "Emp: ". $result_explode[1]."<br />";
-  $result = $con->query("SELECT * FROM EMPLOYEE WHERE NAME = ? ", [$result_explode[0]]);
-
-  if ($result != null) {
-    $result1 = $con->query("UPDATE EMPLOYEE SET SUPERVISOR_ID = ?  WHERE EMP_ID = ? ", [$result[0]['EMP_ID'], $result_explode[1]]);
-    echo "<script Language = 'javascript'>
-          alert ('Supervisor have been updated' ) ;
-          window.location('assign_supervisor.php')</script>";
+  if (isset($_POST['supername']) && isset($_POST['selected'])) {
+    $indexEmp =  $_POST['selected'];
+    $indexSup = $_POST['supername'];
+    if ($indexSup > -1 && $indexSup < count($super)) {
+      $result1 = $con->query("UPDATE EMPLOYEE SET SUPERVISOR_ID = ?  WHERE EMP_ID = ? ", [$super[$indexSup]['EMP_ID'], $result[$indexEmp]['EMP_ID']]);
+      $_SESSION['t'] = 0;
+      $_SESSION['message'] = 'Supervisor updated successfully';
+    } else {
+      $_SESSION['t'] = 1;
+      $_SESSION['message'] = 'No supervisor has been selected';
+    }
   } else {
-    echo "<script Language = 'javascript'>
-            alert ('Invalid username/password!' ) ;
-            window.location('assign_supervisor.php') </script>";
+    $_SESSION['t'] = 1;
+    $_SESSION['message'] = 'No supervisor has been selected';
   }
+  header('Location: assign_supervisor.php');
+  exit;
 }
 if (isset($_POST['Delete'])) {
-  $changed = $_POST['supername'];
-  $result_explode = explode('|', $changed);
-  //echo "Sup: ". $result_explode[0]."<br />";
-  //echo "Emp: ". $result_explode[1]."<br />";
-  $result = $con->query("SELECT * FROM EMPLOYEE WHERE NAME = ? ", [$result_explode[0]]);
-
-  if ($result != null) {
-    $result1 = $con->query("UPDATE EMPLOYEE SET SUPERVISOR_ID = ?  WHERE EMP_ID = ? ", [null, $result_explode[1]]);
-    echo "<script Language = 'javascript'>
-          alert ('Supervisor have been updated' ) ;
-          window.location('assign_supervisor.php')</script>";
-  } else {
-    echo "<script Language = 'javascript'>
-            alert ('Invalid username/password!' ) ;
-            window.location('assign_supervisor.php') </script>";
+  if (isset($_POST['selected'])) {
+    $indexEmp =  $_POST['selected'];
+    $result1 = $con->query("UPDATE EMPLOYEE SET SUPERVISOR_ID = null  WHERE EMP_ID = ? ", [$result[$indexEmp]['EMP_ID']]);
+    $_SESSION['t'] = 0;
+    $_SESSION['message'] = 'Supervisor updated successfully';
+  } else{
+    $_SESSION['t'] = 1;
+    $_SESSION['message'] = 'No employee has been selected';
   }
+  header('Location: assign_supervisor.php');
+  exit;
 }
 
 ?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -93,11 +92,11 @@ if (isset($_POST['Delete'])) {
         <div class="span12">
           <div class="widget-box">
             <div class="widget-title"> <span class="icon"><i class="icon-group"></i></span>
-              <h5>Current Employee</h5>
+              <h5>Employees</h5>
             </div>
             <div class="widget-content nopadding">
               <div style="overflow:auto;">
-                <table class="table table-bordered data-table" id="tablecb" style="white-space: nowrap;">
+                <table class="table table-bordered data-table" id="tablecb" style="white-space: nowrap;font-size:medium">
                   <thead>
                     <tr>
                     <tr>
@@ -123,20 +122,18 @@ if (isset($_POST['Delete'])) {
                   </thead>
                   <tbody>
                     <?php
-                    $result = $con->query("SELECT * FROM EMPLOYEE WHERE EMP_ID != ? AND JOB_ID =?", [$logged_in, 2]);
                     if ($result != null) {
                       for ($i = 0; $i < count($result); ++$i) {
-                        $hiddenid = $i + 1; // for security purposes
                     ?>
                         <tr class="gradeX">
                           <td>
-                            <font size="2px"><?php echo $result[$i]['NAME']; ?></font>
+                            <?php echo $result[$i]['NAME']; ?>
                           </td>
                           <td>
-                            <font size="2px"><?php echo $result[$i]['EMAIL']; ?></font>
+                            <?php echo $result[$i]['EMAIL']; ?>
                           </td>
                           <td>
-                            <font size="2px"><?php echo $result[$i]['PHONENO']; ?></font>
+                            <?php echo $result[$i]['PHONENO']; ?>
                           </td>
                           <?php
                           if ($result[$i]['JOB_ID'] == 1) {
@@ -145,20 +142,20 @@ if (isset($_POST['Delete'])) {
                             $job = "EMPLOYEE";
                           }    ?>
                           <td>
-                            <font size="2px"><?php echo $job; ?></font>
+                            <?php echo $job; ?>
                           </td>
                           <?php
                           if ($result[$i]['SUPERVISOR_ID'] == null) {
                           ?> <td>
-                              <font size="2px"><?php echo "Not Yet Assigned"; ?></font>
+                              <?php echo "Not Yet Assigned"; ?>
                             </td>
                           <?php  } else {
-                            $result2 = $con->query("SELECT * FROM EMPLOYEE WHERE EMP_ID = ?", [$result[$i]['SUPERVISOR_ID'],]);
+                            $result2 = $con->query("SELECT * FROM EMPLOYEE WHERE EMP_ID = ?", [$result[$i]['SUPERVISOR_ID']]);
                             for ($k = 0; $k < count($result2); $k++) {
                               $s_name = $result2[$k]['NAME'];
                             }
                           ?> <td>
-                              <font size="2px"><?php echo $s_name; ?></font>
+                              <?php echo $s_name; ?>
                             </td>
                           <?php }
                           ?>
@@ -171,21 +168,18 @@ if (isset($_POST['Delete'])) {
                                     <div class="controls">
                                       <select name="supername">
                                         <?php
-                                        $super = $con->query("SELECT * FROM EMPLOYEE WHERE JOB_ID =? ", [3,]);
                                         if ($super != null) {
                                           for ($j = 0; $j < count($super); $j++) {
-                                            $name = $super[$j]['NAME'];
-                                            $id =  $result[$i]['EMP_ID']; ?>
-                                            <option name="supername" value="<?php echo $name . "|" . $id; ?>"><?php echo $super[$j]['NAME']; ?></option>
+                                            $name = $super[$j]['NAME']; ?>
+                                            <option value="<?php echo $j; ?>"><?php echo $name ?></option>
                                         <?php }
                                         } ?>
                                       </select>
                                     </div>
                                   </div>
                                   <?php
-                                  $emp_id = $result[$i]['EMP_ID'];
                                   ?>
-                                  <input type="hidden" name="changed_super" value="$emp_id">
+                                  <input type="hidden" name="selected" value="<?php echo $i ?>" />
                                   <p>
                                     <center>
                                       <button type="submit" name="Save" class="btn btn-success">Save</button>
@@ -207,16 +201,6 @@ if (isset($_POST['Delete'])) {
       </div>
     </div>
   </div>
-  <div id="myAlert" class="modal hide" style="font-size:15px">
-    <div class="modal-header" style="border-radius:6px 6px 0 0;">
-      <button data-dismiss="modal" class="close" type="button">×</button>
-      <h3 style="font-size:15px">Delete confirmation</h3>
-    </div>
-    <div class="modal-body">
-      <p id="deletedialog"></p>
-    </div>
-    <div class="modal-footer"> <a data-dismiss="modal" id="confirmButton" class="btn btn-primary">Confirm</a> <a data-dismiss="modal" class="btn">Cancel</a> </div>
-  </div>
 
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.ui.custom.js"></script>
@@ -227,19 +211,52 @@ if (isset($_POST['Delete'])) {
   <script src="js/matrix.js"></script>
   <script src="js/matrix.tables.js"></script>
   <script>
-    <?php
-    if (isset($_SESSION['t'])) {
-      if ($_SESSION['t'] == 1) {
-        echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalError').modal('show');";
-      } else {
-        echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
-        echo "$('#myModalSuccess').modal('show');";
-      }
-      clearMessage();
-    }
-    ?>
+    $(document).ready(function() {
+      var Width = $('#tablecb').width();
+      $("#tablecb_paginate").parent().css({
+        "width": Width,
+        "margin-left": "0px",
+        "padding-left": "0px",
+        "margin-right": "0px",
+        "padding-right": "0px"
+      });
+      var Width = $('#tablecb2').width();
+      $("#tablecb2_paginate").parent().css({
+        "width": Width,
+        "margin-left": "0px",
+        "padding-left": "0px",
+        "margin-right": "0px",
+        "padding-right": "0px"
+      });
+    });
   </script>
+  <?php if (isset($_SESSION['message'])) {
+    if ($_SESSION['t'] == 1) {
+      $id = "myModalError";
+  ?>
+      <div id="myModalError" class="modal hide fade">
+        <div class="modal-header" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
+          <button class="close" data-dismiss="modal">×</button>
+          <strong>Error!</strong> &nbsp;<?php echo $_SESSION['message'] ?>
+        </div>
+      </div>
+    <?php } else {
+      $id = "myModalSuccess";
+    ?>
+      <div id="myModalSuccess" class="modal hide fade">
+        <div class="modal-header" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
+          <button class="close" data-dismiss="modal">×</button>
+          <strong>Success!</strong> &nbsp;<?php echo $_SESSION['message'] ?>
+        </div>
+      </div>
+    <?php } ?>
+    <script>
+      $(document).ready(function() {
+        $('#<?php echo $id; ?>').modal('show');
+      });
+    </script>
+  <?php clearMessage();
+  } ?>
 </body>
 
 </html>
