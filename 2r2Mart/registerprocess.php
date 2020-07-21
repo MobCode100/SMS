@@ -112,7 +112,7 @@ if (isset($_POST['submit'])) {
                                     }
                                 }
                                 if ($emptype == 'partTime' && $hourlyform == true) {
-                                    $con->query("INSERT INTO EMPLOYEENAME,EMAIL,ADDRESS,PHONENO,PASSWORD,SALARY,HIRE_DATE,JOB_ID,SUPERVISOR_ID)VALUES (?,?,?,?,?,?,to_date(?,'fxYYYY-MM-DD'),?,null)", [$name, $email, $address, $phoneno, $pass, $salary, $hiredate, $jobposition[0]]);
+                                    $con->query("INSERT INTO EMPLOYEE (NAME,EMAIL,ADDRESS,PHONENO,PASSWORD,SALARY,HIRE_DATE,JOB_ID,SUPERVISOR_ID) VALUES (?,?,?,?,?,?,to_date(?,'fxYYYY-MM-DD'),?,null)", [$name, $email, $address, $phoneno, $pass, $salary, $hiredate, $jobposition[0]]);
                                     $last_id = $con->query('SELECT EMP_AUTOINC.currval from dual', [])[0][0];
                                     $con->query('INSERT INTO PART_TIME(EMP_ID,HOURLY_RATE)VALUES (?,?)', [$last_id, $hourlyrate]);
                                     $_SESSION['t'] = 0;

@@ -93,7 +93,7 @@ if (isset($_POST['edit'])) {
                 <div class="control-group">
                   <label class="control-label">Quantity</label>
                   <div class="controls">
-                    <input type="number" min="1" max="99999" placeholder="Quantity" name="quantity" value="<?php echo $quantity ?>" class="span5" required>
+                    <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="quantityBar" placeholder="Quantity" name="quantity" value="<?php echo $quantity ?>" class="span5" required>
                   </div>
                 </div>
                 <div class="form-actions" align="right">
@@ -156,6 +156,28 @@ if (isset($_POST['edit'])) {
         return true;
       }
     }
+
+    $('#quantityBar').bind('input propertychange', function() {
+      var value = $(this).val().toString()
+      var count = 0;
+      var max = 5;
+      for (var i = 0; i < value.length; i++) {
+        var char = value.substring(i, i + 1).trim();
+        if (char.length > 0) {
+          if (!isNaN(char)) {
+            count++;
+          }
+        }
+      }
+      if (count > max) {
+        console.log("imhere");
+        var currentpos = $('#quantityBar')[0].selectionStart;
+        var newpos = currentpos - 1;
+        $(this).val(value.substring(0, newpos) + value.substring(currentpos));
+        $('#quantityBar')[0].setSelectionRange(newpos, newpos);
+      }
+    });
+
     var Width = $('#formT').width();
     $("#formT").css("margin-left", "calc((100% - " + Width + "px)/2)");
   </script>
