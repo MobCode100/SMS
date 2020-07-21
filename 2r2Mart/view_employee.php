@@ -12,11 +12,12 @@ preload('all');
 $logged_in = $_SESSION['EMP_ID']; // employee id yang login
 $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
 ?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <title>2r2 Mart</title>
-  <link rel="icon" href="img/logo2.png"></title>
+  <link rel="icon" href="img/logo2.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/bootstrap.min.css" />
@@ -32,6 +33,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
       display: inline
     }
   </style>
+  <link href="modalStyle.css" rel="stylesheet">
 </head>
 
 <body>
@@ -57,7 +59,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
             </div>
             <div class="widget-content nopadding">
               <div style="overflow:auto;">
-                <table class="table table-bordered data-table" id="tablecb" style="white-space: nowrap;">
+                <table class="table table-bordered data-table" id="tablecb" style="white-space: nowrap;font-size:medium">
                   <thead>
                     <tr>
                       <th>Name</th>
@@ -65,7 +67,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                       <th>Phone No</th>
                       <th>Supervisor</th>
                       <?php if ($manager) {
-    ?>
+                      ?>
                         <th>Address</th>
                         <th>Salary</th>
                         <th>Hire Date</th>
@@ -73,7 +75,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                         <th>Allowance</th>
                         <th>Action</th>
                       <?php
-} ?>
+                      } ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -89,20 +91,21 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     FROM employee e join full_time f on e.emp_id = f.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
                     order by e.emp_id asc", [$logged_in]);
                     if ($emp != null) {
-                        for ($i = 0; $i < count($emp); ++$i) {
-                            $hiddenid = $i + 1; // for security purposes?>
+                      for ($i = 0; $i < count($emp); ++$i) {
+                        $hiddenid = $i + 1; // for security purposes
+                    ?>
                         <tr class="gradeX">
-                          <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME']; ?></td>
+                          <td style="white-space:normal;min-width:150px"><?php echo $emp[$i]['NAME']; ?></td>
                           <td><?php echo $emp[$i]['EMAIL']; ?></td>
                           <td><?php echo $emp[$i]['PHONENO']; ?></td>
                           <td><?php echo $emp[$i]['SUPERVISOR']; ?></td>
                           <?php if ($manager) {
-                                ?>
-                            <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS']; ?></td>
-                            <td><?php echo $emp[$i]['SALARY']; ?></td>
+                          ?>
+                            <td style="white-space:normal;min-width:260px"><?php echo $emp[$i]['ADDRESS']; ?></td>
+                            <td><?php echo number_format($emp[$i]['SALARY'], 2, '.', ''); ?></td>
                             <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
                             <td><?php echo $emp[$i]['JOB_TITLE']; ?></td>
-                            <td><?php echo $emp[$i]['ALLOWANCE']; ?></td>
+                            <td><?php echo number_format($emp[$i]['ALLOWANCE'], 2, '.', ''); ?></td>
                             <td>
                               <p>
                                 <center>
@@ -110,17 +113,18 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                                     <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
                                     <button class="btn btn-warning" name="fulltime">Edit</button>
                                   </form>
-                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME']; ?>')">
+                                  <form class="tableform" id="<?php echo "f" . $i ?>" action="delete_employee.php" method="post">
                                     <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
-                                    <button class="btn btn-danger" name="fulltime">Delete</button>
+                                    <input type="hidden" name="fulltime" />
                                   </form>
+                                  <button class="btn btn-danger" onclick="confirm('f<?php echo $i ?>','<?php echo $emp[$i]['NAME'] ?>')">Delete</button>
                               </p>
                             </td>
                           <?php
-                            } ?>
+                          } ?>
                         </tr>
                     <?php
-                        }
+                      }
                     } ?>
                   </tbody>
                 </table>
@@ -141,7 +145,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
             </div>
             <div class="widget-content nopadding">
               <div style="overflow:auto;">
-                <table class="table table-bordered data-table" id="tablecb" style="white-space: nowrap;">
+                <table class="table table-bordered data-table" id="tablecb2" style="white-space: nowrap;font-size:medium">
                   <thead>
                     <tr>
                       <th>Name</th>
@@ -149,7 +153,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                       <th>Phone No</th>
                       <th>Supervisor</th>
                       <?php if ($manager) {
-                        ?>
+                      ?>
                         <th>Address</th>
                         <th>Salary</th>
                         <th>Hire Date</th>
@@ -157,7 +161,7 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                         <th>Hourly Rate
                         <th>Action</th>
                       <?php
-                    } ?>
+                      } ?>
                     </tr>
                   </thead>
                   <tbody>
@@ -171,20 +175,21 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                     FROM employee e join part_time p on e.emp_id = p.emp_id join job j on j.job_id = e.job_id where e.emp_id != ?
                     order by e.emp_id asc", [$logged_in]);
                     if ($emp != null) {
-                        for ($i = 0; $i < count($emp); ++$i) {
-                            $hiddenid = $i + 1; // for security purposes?>
+                      for ($i = 0; $i < count($emp); ++$i) {
+                        $hiddenid = $i + 1; // for security purposes
+                    ?>
                         <tr class="gradeX">
-                          <td style="width:14%;white-space:normal;"><?php echo $emp[$i]['NAME']; ?></td>
+                          <td style="white-space:normal;min-width:150px"><?php echo $emp[$i]['NAME']; ?></td>
                           <td><?php echo $emp[$i]['EMAIL']; ?></td>
                           <td><?php echo $emp[$i]['PHONENO']; ?></td>
                           <td><?php echo $emp[$i]['SUPERVISOR']; ?></td>
                           <?php if ($manager) {
-                                ?>
-                            <td style="white-space:normal;"><?php echo $emp[$i]['ADDRESS']; ?></td>
-                            <td><?php echo $emp[$i]['SALARY']; ?></td>
+                          ?>
+                            <td style="white-space:normal;min-width:260px"><?php echo $emp[$i]['ADDRESS']; ?></td>
+                            <td><?php echo number_format($emp[$i]['SALARY'], 2, '.', ''); ?></td>
                             <td><?php echo $emp[$i]['HIRE_DATE']; ?></td>
                             <td><?php echo $emp[$i]['JOB_TITLE']; ?></td>
-                            <td><?php echo $emp[$i]['HOURLY_RATE']; ?></td>
+                            <td><?php echo number_format($emp[$i]['HOURLY_RATE'], 2, '.', ''); ?></td>
                             <td>
                               <p>
                                 <center>
@@ -192,17 +197,18 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
                                     <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
                                     <button class="btn btn-warning" name="parttime">Edit</button>
                                   </form>
-                                  <form class="tableform" action="delete_employee.php" method="post" onsubmit="return deleteConfirmation('<?php echo $emp[$i]['NAME']; ?>')">
+                                  <form class="tableform" id="<?php echo "p" . $i ?>" action="delete_employee.php" method="post">
                                     <input type="hidden" value="<?php echo $hiddenid; ?>" name="row" />
-                                    <button class="btn btn-danger" name="parttime">Delete</button>
+                                    <input type="hidden" name="parttime" />
                                   </form>
+                                  <button class="btn btn-danger" onclick="confirm('p<?php echo $i ?>','<?php echo $emp[$i]['NAME'] ?>')">Delete</button>
                               </p>
                             </td>
                           <?php
-                            } ?>
+                          } ?>
                         </tr>
                     <?php
-                        }
+                      }
                     } ?>
                   </tbody>
                 </table>
@@ -211,6 +217,29 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div id="myAlert" class="modal hide fade" style="font-size:15px">
+    <div class="modal-header" style="border-radius:6px 6px 0 0;">
+      <button data-dismiss="modal" class="close" type="button">×</button>
+      <h3 style="font-size:15px">Delete confirmation</h3>
+    </div>
+    <div class="modal-body">
+      <p id="deletedialog"></p>
+    </div>
+    <div class="modal-footer"> <a data-dismiss="modal" id="confirmButton" class="btn btn-primary">Confirm</a> <a data-dismiss="modal" class="btn">Cancel</a> </div>
+  </div>
+
+  <div id="myModalError" class="modal hide fade">
+    <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
+      <button class="close" data-dismiss="modal">×</button>
+      <strong>Error!</strong> &nbsp;
+    </div>
+  </div>
+  <div id="myModalSuccess" class="modal hide fade">
+    <div class="modal-header" id="success_text" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
+      <button class="close" data-dismiss="modal">×</button>
+      <strong>Success!</strong> &nbsp;
     </div>
   </div>
 
@@ -223,6 +252,20 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
   <script src="js/matrix.js"></script>
   <script src="js/matrix.tables.js"></script>
   <script>
+    $(document).ready(function() {
+      <?php
+      if (isset($_SESSION['t'])) {
+        if ($_SESSION['t'] == 1) {
+          echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalError').modal('show');";
+        } else {
+          echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalSuccess').modal('show');";
+        }
+        clearMessage();
+      }
+      ?>
+    });
     $(document).ready(function() {
       var Width = $('#tablecb').width();
       $("#tablecb_paginate").parent().css({
@@ -242,10 +285,15 @@ $manager = $_SESSION['JOB_ID'] == 1; // variable nk tau manager atau tidak
       });
     });
 
-    function deleteConfirmation($name) {
-      return confirm("Do you want to remove " + $name + " ?");
+    function confirm(id, name) {
+      $('#deletedialog').html('Are you sure you want to delete ' + name + "?");
+      $("#confirmButton").click(function() {
+        $("#" + id).trigger("submit");
+      });
+      $('#myAlert').modal('show');
     }
   </script>
+
 </body>
 
 </html>

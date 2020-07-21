@@ -27,6 +27,8 @@ if(isset($_POST['sBut'])){
         $con->query("UPDATE TRANSACTION set quantity = ?,product_id = ? where transaction_id = ?",[$_POST['quantity'],$_POST['product'],$_POST['tid']]);
         $con->query("UPDATE PRODUCT set quantity = quantity + ? where product_id = ?",[$_POST['quantity'],$_POST['product']]);
     }
-    echo "<script language='javascript'>window.location='view_transaction.php';alert('Transaction edited successfully!');</script>";
+    $_SESSION['t'] = 0;
+    $_SESSION['message'] = 'Transaction edited successfully!';
+    echo "<script language='javascript'>window.location='view_transaction.php';</script>";
 }
 ?>

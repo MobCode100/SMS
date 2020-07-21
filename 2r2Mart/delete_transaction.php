@@ -21,5 +21,7 @@ if (isset($_POST['delete'])) {
         $con->query("UPDATE PRODUCT set quantity = quantity - ? where product_id = ?", [$data[0]['QUANTITY'], $data[0]['PRODUCT_ID']]);
     }
 
-    echo "<script language='javascript'>window.location='view_transaction.php';alert('Transaction deleted successfully!');</script>";
+    $_SESSION['t'] = 0;
+    $_SESSION['message'] = 'Transaction deleted successfully!';
+    echo "<script language='javascript'>window.location='view_transaction.php';</script>";
 }

@@ -14,7 +14,7 @@ preload('all');
 
 <head>
   <title>2r2 Mart</title>
-  <link rel="icon" href="img/logo2.png"></title>
+  <link rel="icon" href="img/logo2.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/bootstrap.min.css" />
@@ -28,6 +28,7 @@ preload('all');
   <link rel="stylesheet" href="css/bootstrap-wysihtml5.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <link href="modalStyle.css" rel="stylesheet">
 </head>
 
 <body>
@@ -49,7 +50,7 @@ preload('all');
     <div class="container-fluid">
 
       <div align="center" class="control-group normal_text">
-        <h3><img src="img/password.png" alt="Logo" width="250" height="350" style="border-radius: 5%;" /> </h3>
+        <h3><img src="img/password.png" alt="Logo" width="250" height="350" style="border-radius: 6px;" /> </h3>
       </div>
       <div class="row-fluid">
 
@@ -59,7 +60,7 @@ preload('all');
           <h5>1. Does not match or significantly contain your name, e.g. 'maslan123'</h5>
           <div class="widget-box">
 
-            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <div class="widget-title"> <span class="icon"> <i class="icon-key"></i> </span>
               <h5>Password-info</h5>
             </div>
             <div class="widget-content nopadding">
@@ -96,6 +97,18 @@ preload('all');
         </div>
       </div>
     </div>
+    <div id="myModalError" class="modal hide fade fade">
+      <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
+        <button class="close" data-dismiss="modal">×</button>
+        <strong>Error!</strong> &nbsp;
+      </div>
+    </div>
+    <div id="myModalSuccess" class="modal hide fade">
+      <div class="modal-header" id="success_text" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
+        <button class="close" data-dismiss="modal">×</button>
+        <strong>Success!</strong> &nbsp;
+      </div>
+    </div>
 
   </div>
   <!--Footer-part-->
@@ -113,6 +126,21 @@ preload('all');
   <script src="js/jquery.peity.min.js"></script>
   <script src="js/bootstrap-wysihtml5.js"></script>
   <script>
+    $(document).ready(function() {
+      <?php
+      if (isset($_SESSION['t'])) {
+        if ($_SESSION['t'] == 1) {
+          echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalError').modal('show');";
+        } else {
+          echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalSuccess').modal('show');";
+        }
+        clearMessage();
+      }
+      ?>
+    });
+
     function validate() {
       var nP = $('input[name ="newPassword"]').val();
       var cP = $('input[name ="confirmPassword"]').val()
@@ -132,15 +160,18 @@ preload('all');
           if (nP === cP) {
             return true;
           } else {
-            alert("New passwords do not match!");
+            $('#error_text').html('<button class="close" data-dismiss="modal">×</button><strong>Error!</strong> &nbsp;New passwords do not match!');
+            $('#myModalError').modal('show');
             return false;
           }
         } else {
-          alert("Name found in new password!");
+          $('#error_text').html('<button class="close" data-dismiss="modal">×</button><strong>Error!</strong> &nbsp;Name found in new password!');
+          $('#myModalError').modal('show');
           return false;
         }
       } else {
-        alert("Password must be longer than 7 characters!");
+        $('#error_text').html('<button class="close" data-dismiss="modal">×</button><strong>Error!</strong> &nbsp;Password must be longer than 7 characters!');
+        $('#myModalError').modal('show');
         return false;
       }
     }

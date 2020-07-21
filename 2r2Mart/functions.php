@@ -75,3 +75,7 @@ function validateEmail($email)
 {
     return preg_match_all('/^(([^\s"().,:;<>@\[\\\\\]])+(\.[^\s"().,:;<>@\[\\\\\]]+)*|(".+"))@(\[(([0-9]{1,2}|(25[0-5]|[0-2][0-4][0-9]))\.){3}([0-9]{1,2}|(25[0-4]|[0-2][0-4][0-9]))\]|([a-zA-Z\-0-9]+\.)+([a-zA-Z]{2,}))$/m', $email);
 }
+
+function clearMessage(){
+    unset($_SESSION['t']);unset($_SESSION['message']);
+}

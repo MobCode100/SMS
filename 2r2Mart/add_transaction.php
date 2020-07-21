@@ -25,6 +25,7 @@ if (isset($_POST['edit'])) {
   }
 }
 ?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -40,6 +41,7 @@ if (isset($_POST['edit'])) {
   <link rel="stylesheet" href="css/matrix-media.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <link href="modalStyle.css" rel="stylesheet">
 </head>
 
 <body>
@@ -60,7 +62,7 @@ if (isset($_POST['edit'])) {
       <div class="row-fluid">
         <div class="span9" id="formT">
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <div class="widget-title"> <span class="icon"> <i class="icon-plus"></i> </span>
               <h5>Stock In</h5>
             </div>
             <div class="widget-content nopadding">
@@ -106,9 +108,39 @@ if (isset($_POST['edit'])) {
 
     </div>
   </div>
-
+  <div id="myModalError" class="modal hide fade">
+    <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
+      <button class="close" data-dismiss="modal">×</button>
+      <strong>Error!</strong> &nbsp;
+    </div>
+  </div>
+  <div id="myModalSuccess" class="modal hide fade">
+    <div class="modal-header" id="success_text" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
+      <button class="close" data-dismiss="modal">×</button>
+      <strong>Success!</strong> &nbsp;
+    </div>
+  </div>
   <script src="js/jquery.min.js"></script>
+  <script src="js/jquery.ui.custom.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.uniform.js"></script>
+  <script src="js/select2.min.js"></script>
+  <script src="js/matrix.js"></script>
   <script>
+    $(document).ready(function() {
+      <?php
+      if (isset($_SESSION['t'])) {
+        if ($_SESSION['t'] == 1) {
+          echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalError').modal('show');";
+        } else {
+          echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalSuccess').modal('show');";
+        }
+        clearMessage();
+      }
+      ?>
+    });
     $(document).ready(function() {
       $("#select_p").val('<?php echo $product ?>');
     });
@@ -117,7 +149,8 @@ if (isset($_POST['edit'])) {
       console.log(document.getElementById('select_p').value);
       var val = document.getElementById('select_p').value
       if (val == 0) {
-        alert("Please select a product!");
+        $('#error_text').html('<button class="close" data-dismiss="modal">×</button><strong>Error!</strong> &nbsp;Please select a product');
+        $('#myModalError').modal('show');
         return false;
       } else {
         return true;
@@ -126,11 +159,6 @@ if (isset($_POST['edit'])) {
     var Width = $('#formT').width();
     $("#formT").css("margin-left", "calc((100% - " + Width + "px)/2)");
   </script>
-  <script src="js/jquery.ui.custom.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.uniform.js"></script>
-  <script src="js/select2.min.js"></script>
-  <script src="js/matrix.js"></script>
   <script src="js/matrix.form_common.js"></script>
 </body>
 

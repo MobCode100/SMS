@@ -9,11 +9,12 @@ session_start();
 */
 preload('all');
 ?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <title>2r2 Mart</title>
-  <link rel="icon" href="img/logo2.png"></title>
+  <link rel="icon" href="img/logo2.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/bootstrap.min.css" />
@@ -24,6 +25,7 @@ preload('all');
   <link rel="stylesheet" href="css/matrix-media.css" />
   <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <link href="modalStyle.css" rel="stylesheet">
   <style>
     .tableform {
       display: inline
@@ -48,11 +50,11 @@ preload('all');
       <div class="row-fluid">
         <div class="span12">
           <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+            <div class="widget-title"> <span class="icon"><i class="icon-truck"></i></span>
               <h5>Transactions</h5>
             </div>
             <div class="widget-content nopadding">
-              <table class="table table-bordered data-table">
+              <table class="table table-bordered data-table" style="font-size:medium">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -72,7 +74,7 @@ preload('all');
                     for ($i = 0; $i < count($trns); $i++) {
                   ?>
                       <tr class="gradeX">
-                        <td><?php echo $i+1 ?></td>
+                        <td><?php echo $i + 1 ?></td>
                         <td><?php echo $trns[$i]['P_NAME'] ?></td>
                         <td><?php echo $trns[$i]['QUANTITY']  ?></td>
                         <td><?php echo $trns[$i]['TIME'] ?></td>
@@ -84,10 +86,11 @@ preload('all');
                                 <input type="hidden" value="<?php echo $trns[$i]['TRANSACTION_ID']; ?>" name="id" />
                                 <button class="btn btn-warning" name="edit">Edit</button>
                               </form>
-                              <form class="tableform" action="delete_transaction.php" method="post" onsubmit="return deleteConfirmation()">
+                              <form class="tableform" id="<?php echo $i + 1 ?>" action="delete_transaction.php" method="post">
                                 <input type="hidden" value="<?php echo $trns[$i]['TRANSACTION_ID']; ?>" name="id" />
-                                <button class="btn btn-danger" name="delete">Delete</button>
+                                <input type="hidden" name="delete" />
                               </form>
+                              <button class="btn btn-danger" onclick="confirm(<?php echo $i + 1 ?>,'<?php echo $trns[$i]['P_NAME'] ?>',<?php echo $trns[$i]['QUANTITY']  ?>)">Delete</button>
                           </p>
                         </td>
                       </tr>
@@ -102,6 +105,30 @@ preload('all');
     </div>
   </div>
 
+  <div id="myModalError" class="modal hide fade">
+    <div class="modal-header" id="error_text" style="color: #b94a48;background-color: #f2dede;border-color: #eed3d7; border-radius:6px;font-size:15px">
+      <button class="close" data-dismiss="modal">×</button>
+      <strong>Error!</strong> &nbsp;
+    </div>
+  </div>
+  <div id="myModalSuccess" class="modal hide fade">
+    <div class="modal-header" id="success_text" style="color: #468847;background-color: #dff0d8;border-color: #d6e9c6; border-radius:6px;font-size:15px">
+      <button class="close" data-dismiss="modal">×</button>
+      <strong>Success!</strong> &nbsp;
+    </div>
+  </div>
+
+  <div id="myAlert" class="modal hide fade" style="font-size:15px">
+    <div class="modal-header" style="border-radius:6px 6px 0 0">
+      <button data-dismiss="modal" class="close" type="button">×</button>
+      <h3 style="font-size:15px">Delete confirmation</h3>
+    </div>
+    <div class="modal-body">
+      <p id="deletedialog"></p>
+    </div>
+    <div class="modal-footer"> <a data-dismiss="modal" id="confirmButton" class="btn btn-primary">Confirm</a> <a data-dismiss="modal" class="btn">Cancel</a> </div>
+  </div>
+
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.ui.custom.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -111,8 +138,27 @@ preload('all');
   <script src="js/matrix.js"></script>
   <script src="js/matrix.tables.js"></script>
   <script>
-    function deleteConfirmation($name) {
-      return confirm("Are you sure to delete?");
+    $(document).ready(function() {
+      <?php
+      if (isset($_SESSION['t'])) {
+        if ($_SESSION['t'] == 1) {
+          echo "$('#error_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Error!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalError').modal('show');";
+        } else {
+          echo "$('#success_text').html('<button class=\"close\" data-dismiss=\"modal\">×</button><strong>Success!</strong> &nbsp;" . $_SESSION['message'] . "');";
+          echo "$('#myModalSuccess').modal('show');";
+        }
+        clearMessage();
+      }
+      ?>
+    });
+
+    function confirm(id, name, quantity) {
+      $('#deletedialog').html('Are you sure you want to delete this record? <br>No: ' + id + '<br>' + 'Name: ' + name + '<br>' + 'Quantity: ' + quantity);
+      $("#confirmButton").click(function() {
+        $("#" + id).trigger("submit");
+      });
+      $('#myAlert').modal('show');
     }
   </script>
 </body>
