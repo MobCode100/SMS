@@ -93,7 +93,7 @@ if (isset($_POST['edit'])) {
                 <div class="control-group">
                   <label class="control-label">Quantity</label>
                   <div class="controls">
-                    <input type="number" min="1" placeholder="Quantity" name="quantity" value="<?php echo $quantity ?>" class="span5" required>
+                    <input type="number" min="1" max="99999" placeholder="Quantity" name="quantity" value="<?php echo $quantity ?>" class="span5" required>
                   </div>
                 </div>
                 <div class="form-actions" align="right">
