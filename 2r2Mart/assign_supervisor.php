@@ -40,7 +40,7 @@ if (isset($_POST['Delete'])) {
     $result1 = $con->query("UPDATE EMPLOYEE SET SUPERVISOR_ID = null  WHERE EMP_ID = ? ", [$result[$indexEmp]['EMP_ID']]);
     $_SESSION['t'] = 0;
     $_SESSION['message'] = 'Supervisor updated successfully';
-  } else{
+  } else {
     $_SESSION['t'] = 1;
     $_SESSION['message'] = 'No employee has been selected';
   }
@@ -126,7 +126,7 @@ if (isset($_POST['Delete'])) {
                       for ($i = 0; $i < count($result); ++$i) {
                     ?>
                         <tr class="gradeX">
-                          <td>
+                          <td style="white-space:normal;min-width:150px">
                             <?php echo $result[$i]['NAME']; ?>
                           </td>
                           <td>
@@ -154,7 +154,7 @@ if (isset($_POST['Delete'])) {
                             for ($k = 0; $k < count($result2); $k++) {
                               $s_name = $result2[$k]['NAME'];
                             }
-                          ?> <td>
+                          ?> <td style="white-space:normal;min-width:150px">
                               <?php echo $s_name; ?>
                             </td>
                           <?php }
@@ -214,14 +214,6 @@ if (isset($_POST['Delete'])) {
     $(document).ready(function() {
       var Width = $('#tablecb').width();
       $("#tablecb_paginate").parent().css({
-        "width": Width,
-        "margin-left": "0px",
-        "padding-left": "0px",
-        "margin-right": "0px",
-        "padding-right": "0px"
-      });
-      var Width = $('#tablecb2').width();
-      $("#tablecb2_paginate").parent().css({
         "width": Width,
         "margin-left": "0px",
         "padding-left": "0px",
